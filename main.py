@@ -2,12 +2,14 @@ import pickle
 import os
 import os.path
 from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from google.oauth2 import service_account
 
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+
+SERVICE_ACCOUNT_FILE = os.environ['SERVICE_ACCOUNT_FILE']
 
 SPREADSHEET_ID = os.environ['SPREADSHEET_ID']
 RANGE_NAME_READ = os.environ['RANGE_NAME_READ']
@@ -29,9 +31,8 @@ def get_creds():
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server()
+            creds = service_account.Credentials.from_service_account_file(
+                        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
         # Save the credentials for the next run
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
