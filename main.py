@@ -13,9 +13,7 @@ SPREADSHEET_ID = os.environ['SPREADSHEET_ID']
 RANGE_NAME = os.environ['RANGE_NAME']
 
 
-def main():
-    """Shows basic usage of the Sheets API.
-    """
+def get_creds():
     creds = None
 
     # The file token.pickle stores the user's access and refresh tokens, and is
@@ -37,7 +35,13 @@ def main():
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
-    service = build('sheets', 'v4', credentials=creds)
+    return creds
+
+
+def main():
+    """Shows basic usage of the Sheets API.
+    """
+    service = build('sheets', 'v4', credentials=get_creds())
 
     # Call the Sheets API
     sheet = service.spreadsheets()
