@@ -13,7 +13,6 @@ SERVICE_ACCOUNT_FILE = os.environ['SERVICE_ACCOUNT_FILE']
 
 SPREADSHEET_ID = os.environ['SPREADSHEET_ID']
 RANGE_NAME_READ = os.environ['RANGE_NAME_READ']
-RANGE_NAME_WRITE = os.environ['RANGE_NAME_WRITE']
 
 
 def get_creds():
@@ -41,17 +40,42 @@ def get_creds():
 
 
 def try_writing(service):
-    values = [
-        ['Can', 'I'],
-        ['write', 'here?'],
-    ]
-    body = {
-        'values': values
+    requests = []
+
+    range = {
+        "sheetId": 0,
+        "startColumnIndex": 2,
+        "startRowIndex": 2,
+        "endColumnIndex": 4,
+        "endRowIndex": 4
     }
-    result = service.spreadsheets().values().update(
-        spreadsheetId=SPREADSHEET_ID, range=RANGE_NAME_WRITE,
-        valueInputOption='RAW', body=body).execute()
-    print('{0} cells updated.'.format(result.get('updatedCells')))
+    rows = [
+        {'values': [
+            {'userEnteredValue': {'stringValue': 'Can'}},
+            {'userEnteredValue': {'stringValue': 'I'}}
+        ]},
+        {'values': [
+            {'userEnteredValue': {'stringValue': 'write'}},
+            {'userEnteredValue': {'stringValue': 'here?'}}
+        ]}
+    ]
+
+    requests.append({
+        'updateCells': {
+            'fields': '*',
+            'range': range,
+            'rows': rows
+        }
+    })
+
+    body = {
+        'requests': requests
+    }
+    service.spreadsheets().batchUpdate(
+        spreadsheetId=SPREADSHEET_ID,
+        body=body).execute()
+
+    print('Spreadsheet cell values updated')
 
 
 def main():
