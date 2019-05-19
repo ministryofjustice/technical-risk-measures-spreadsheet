@@ -8,17 +8,20 @@ def column_letter_to_number(letter):
 
 def split_cell_string(cell):
     """
-    Split a cell specifier into letters and numbers.
+    Split a cell specifier into its letters and numbers.
 
-    This doesn't do anything clever, so cells need to be specified correctly.
+    This uses letters from the whole string, rather than only from the start,
+    so cells must be specified correctly.
     """
     letters = ''
     numbers = ''
     for char in cell:
         if char.isalpha():
             letters += char
-        else:
+        elif char.isdigit():
             numbers += char
+        else:
+            raise ValueError('Found a non-alphanumeric character in cell specifier')
     return (letters, numbers)
 
 
