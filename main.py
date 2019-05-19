@@ -12,7 +12,7 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SERVICE_ACCOUNT_FILE = os.environ['SERVICE_ACCOUNT_FILE']
 
 SPREADSHEET_ID = os.environ['SPREADSHEET_ID']
-RANGE_NAME_READ = os.environ['RANGE_NAME_READ']
+SHEET_ID = os.environ['SHEET_ID']
 
 
 def get_creds():
@@ -44,7 +44,7 @@ def try_reading(service):
     # Call the Sheets API
     sheet = service.spreadsheets()
     result = sheet.values().get(spreadsheetId=SPREADSHEET_ID,
-                                range=RANGE_NAME_READ).execute()
+                                range='Sheet1!A1:A2').execute()
     values = result.get('values', [])
 
     if not values:
@@ -58,7 +58,7 @@ def try_writing(service):
     requests = []
 
     range = {
-        "sheetId": 0,
+        "sheetId": SHEET_ID,
         "startColumnIndex": 2,
         "startRowIndex": 2,
         "endColumnIndex": 4,
