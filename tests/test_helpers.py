@@ -43,3 +43,14 @@ def test_a1_to_range_A12():
         "endRowIndex": 12
     }
     assert a1_to_range('A12', 0) == expected_range
+
+
+def test_a1_to_range_case_insensitive():
+    expected_range = {
+        "sheetId": 0,
+        "startColumnIndex": 0,
+        "startRowIndex": 11,
+        "endColumnIndex": 1,
+        "endRowIndex": 12
+    }
+    assert a1_to_range('a12', 0) == expected_range

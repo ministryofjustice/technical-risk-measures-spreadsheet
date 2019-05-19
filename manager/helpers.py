@@ -30,7 +30,7 @@ def a1_to_range(cells, sheet_id):
     range objects.
     """
     letters, numbers = split_cell_string(cells)
-    start_column_index = column_letter_to_number(letters)
+    start_column_index = column_letter_to_number(letters.upper())
     start_row_index = int(numbers) - 1
 
     return {
