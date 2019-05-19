@@ -81,12 +81,15 @@ def try_writing(service):
 
 
 def main():
-    """Shows basic usage of the Sheets API.
+    """Apply all the specified changes to a sheet.
     """
     service = build('sheets', 'v4', credentials=get_creds())
 
     try_reading(service)
     try_writing(service)
+
+    requests = [req(SHEET_ID) for req in batch_requests.all_requests_in_order]
+    apply_batch(service, requests)
 
 
 if __name__ == '__main__':
