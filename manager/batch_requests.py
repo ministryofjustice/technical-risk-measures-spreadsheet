@@ -46,6 +46,63 @@ def merge_header_row_cells(sheet_id):
     return requests
 
 
+def write_first_header_rows(sheet_id):
+    """
+    Write the first header row values.
+
+    These are isolated cells rather than a contiguous range, so specify them as
+    separate requests.
+    """
+    requests = [
+        {
+            'updateCells': {
+                'fields': '*',
+                'range': a1_to_range('B1', sheet_id),
+                'rows': [
+                    {'values': [
+                        {'userEnteredValue': {'stringValue': 'Summaries'}}
+                    ]}
+                ]
+            }
+        },
+        {
+            'updateCells': {
+                'fields': '*',
+                'range': a1_to_range('G1', sheet_id),
+                'rows': [
+                    {'values': [
+                        {'userEnteredValue': {'stringValue': 'People criteria'}}
+                    ]}
+                ]
+            }
+        },
+        {
+            'updateCells': {
+                'fields': '*',
+                'range': a1_to_range('J1', sheet_id),
+                'rows': [
+                    {'values': [
+                        {'userEnteredValue': {'stringValue': 'Tech criteria'}}
+                    ]}
+                ]
+            }
+        },
+        {
+            'updateCells': {
+                'fields': '*',
+                'range': a1_to_range('W1', sheet_id),
+                'rows': [
+                    {'values': [
+                        {'userEnteredValue': {'stringValue': 'Atrophy criteria'}}
+                    ]}
+                ]
+            }
+        }
+    ]
+
+    return requests
+
+
 def write_second_header_row_request(sheet_id):
     """
     Write the second header row values.
@@ -107,6 +164,7 @@ def all_requests_in_order(sheet_id):
     requests = []
 
     requests.extend(merge_header_row_cells(sheet_id))
+    requests.extend(write_first_header_rows(sheet_id))
     requests.append(write_second_header_row_request(sheet_id))
 
     return requests
