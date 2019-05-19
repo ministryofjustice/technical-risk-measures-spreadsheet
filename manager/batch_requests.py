@@ -28,9 +28,10 @@ def test_write_request(sheet_id):
 
 def merge_header_row_cells(sheet_id):
     ranges = [
-        a1_to_range('A1:A2', sheet_id),
         a1_to_range('B1:D1', sheet_id),
         a1_to_range('G1:I1', sheet_id),
+        a1_to_range('J1:V1', sheet_id),
+        a1_to_range('W1:AC1', sheet_id),
     ]
 
     requests = [
