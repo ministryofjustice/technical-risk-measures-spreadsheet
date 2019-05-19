@@ -12,6 +12,10 @@ def split_cell_string(cell):
 
     This uses letters from the whole string, rather than only from the start,
     so cells must be specified correctly.
+
+    This function also takes care of case-insensitivity - upper and lower case
+    letters refer to the same column in spreadsheets so we should do the same
+    here.
     """
     letters = ''
     numbers = ''
@@ -22,7 +26,7 @@ def split_cell_string(cell):
             numbers += char
         else:
             raise ValueError('Found a non-alphanumeric character in cell specifier')
-    return (letters, numbers)
+    return (letters.upper(), numbers)
 
 
 def a1_to_range(cells, sheet_id):
@@ -38,11 +42,11 @@ def a1_to_range(cells, sheet_id):
         start = end = cells
 
     start_letters, start_numbers = split_cell_string(start)
-    start_column_index = column_letter_to_number(start_letters.upper())
+    start_column_index = column_letter_to_number(start_letters)
     start_row_index = int(start_numbers) - 1
 
     end_letters, end_numbers = split_cell_string(end)
-    end_column_index = column_letter_to_number(end_letters.upper()) + 1
+    end_column_index = column_letter_to_number(end_letters) + 1
     end_row_index = int(end_numbers)
 
     return {
