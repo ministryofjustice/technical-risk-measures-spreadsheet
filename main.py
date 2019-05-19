@@ -88,7 +88,7 @@ def main():
     try_reading(service)
     try_writing(service)
 
-    requests = [req(SHEET_ID) for req in batch_requests.all_requests_in_order]
+    requests = batch_requests.all_requests_in_order(SHEET_ID)
     apply_batch(service, requests)
 
 

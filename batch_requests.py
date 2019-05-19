@@ -29,6 +29,43 @@ def test_write_request(sheet_id):
     }
 
 
+def merge_header_row_cells(sheet_id):
+    ranges = [
+        {
+            "sheetId": sheet_id,
+            "startColumnIndex": 0,
+            "startRowIndex": 0,
+            "endColumnIndex": 1,
+            "endRowIndex": 2
+        },
+        {
+            "sheetId": sheet_id,
+            "startColumnIndex": 1,
+            "startRowIndex": 0,
+            "endColumnIndex": 4,
+            "endRowIndex": 1
+        },
+        {
+            "sheetId": sheet_id,
+            "startColumnIndex": 6,
+            "startRowIndex": 0,
+            "endColumnIndex": 9,
+            "endRowIndex": 1
+        },
+    ]
+
+    requests = [
+        {
+            'mergeCells': {
+                'range': range,
+                'mergeType': 'MERGE_ALL'
+            }
+        }
+        for range in ranges
+    ]
+    return requests
+
+
 def write_second_header_row_request(sheet_id):
     """
     Write the second header row values.
@@ -86,6 +123,16 @@ def write_second_header_row_request(sheet_id):
     }
 
 
-all_requests_in_order = [
-    write_second_header_row_request,
-]
+def all_requests_in_order(sheet_id):
+    """
+    Return all the real requests, in the right order for applying as a batch.
+
+    Uses extend and append to construct a flat list of requests, since some
+    functions return multiple similar request objects.
+    """
+    requests = []
+
+    requests.extend(merge_header_row_cells(sheet_id))
+    requests.append(write_second_header_row_request(sheet_id))
+
+    return requests
