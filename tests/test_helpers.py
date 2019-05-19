@@ -1,4 +1,4 @@
-from manager.helpers import column_letter_to_number, split_cell_string
+from manager.helpers import column_letter_to_number, split_cell_string, a1_to_range
 
 
 def test_column_letter_to_number_A():
@@ -21,3 +21,25 @@ def test_split_cell_string_invalid_cell():
     # This is an invalid cell specifier - this test is here to demonstrate that
     # split_cell_string isn't doing anything clever, so its input must be good.
     assert split_cell_string('94J4NM20X') == ('JNMX', '94420')
+
+
+def test_a1_to_range_A1():
+    expected_range = {
+        "sheetId": 0,
+        "startColumnIndex": 0,
+        "startRowIndex": 0,
+        "endColumnIndex": 1,
+        "endRowIndex": 1
+    }
+    assert a1_to_range('A1', 0) == expected_range
+
+
+def test_a1_to_range_A12():
+    expected_range = {
+        "sheetId": 0,
+        "startColumnIndex": 0,
+        "startRowIndex": 11,
+        "endColumnIndex": 1,
+        "endRowIndex": 12
+    }
+    assert a1_to_range('A12', 0) == expected_range
