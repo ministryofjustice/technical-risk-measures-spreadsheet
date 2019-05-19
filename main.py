@@ -21,8 +21,9 @@ def get_creds():
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    token_filename = 'token.pickle'
+    if os.path.exists(token_filename):
+        with open(token_filename, 'rb') as token:
             creds = pickle.load(token)
 
     # If there are no (valid) credentials available, let the user log in.
@@ -33,7 +34,7 @@ def get_creds():
             creds = service_account.Credentials.from_service_account_file(
                         SERVICE_ACCOUNT_FILE, scopes=SCOPES)
         # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
+        with open(token_filename, 'wb') as token:
             pickle.dump(creds, token)
 
     return creds
