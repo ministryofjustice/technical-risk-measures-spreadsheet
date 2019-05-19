@@ -85,9 +85,6 @@ def main():
     """
     service = build('sheets', 'v4', credentials=get_creds())
 
-    try_reading(service)
-    try_writing(service)
-
     requests = batch_requests.all_requests_in_order(SHEET_ID)
     apply_batch(service, requests)
 
