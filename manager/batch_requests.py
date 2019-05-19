@@ -1,14 +1,11 @@
+from helpers import a1_to_range
+
+
 def test_write_request(sheet_id):
     """
     Test writing to a sheet, mainly to check we have permission to write.
     """
-    range = {
-        "sheetId": sheet_id,
-        "startColumnIndex": 2,
-        "startRowIndex": 2,
-        "endColumnIndex": 4,
-        "endRowIndex": 4
-    }
+    range = a1_to_range('C3:D4', sheet_id)
     rows = [
         {'values': [
             {'userEnteredValue': {'stringValue': 'Can'}},
@@ -31,27 +28,9 @@ def test_write_request(sheet_id):
 
 def merge_header_row_cells(sheet_id):
     ranges = [
-        {
-            "sheetId": sheet_id,
-            "startColumnIndex": 0,
-            "startRowIndex": 0,
-            "endColumnIndex": 1,
-            "endRowIndex": 2
-        },
-        {
-            "sheetId": sheet_id,
-            "startColumnIndex": 1,
-            "startRowIndex": 0,
-            "endColumnIndex": 4,
-            "endRowIndex": 1
-        },
-        {
-            "sheetId": sheet_id,
-            "startColumnIndex": 6,
-            "startRowIndex": 0,
-            "endColumnIndex": 9,
-            "endRowIndex": 1
-        },
+        a1_to_range('A1:A2', sheet_id),
+        a1_to_range('B1:D1', sheet_id),
+        a1_to_range('G1:I1', sheet_id),
     ]
 
     requests = [
@@ -70,13 +49,7 @@ def write_second_header_row_request(sheet_id):
     """
     Write the second header row values.
     """
-    range = {
-        "sheetId": sheet_id,
-        "startColumnIndex": 0,
-        "startRowIndex": 1,
-        "endColumnIndex": 29,
-        "endRowIndex": 2
-    }
+    range = a1_to_range('A2:AC2', sheet_id)
     values = [
         'Service',
         'People summary',
