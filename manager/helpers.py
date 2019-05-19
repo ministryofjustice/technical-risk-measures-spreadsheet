@@ -32,14 +32,23 @@ def a1_to_range(cells, sheet_id):
     A1 notation is more intuitive to work with, but the Sheets API requires
     range objects.
     """
-    letters, numbers = split_cell_string(cells)
-    start_column_index = column_letter_to_number(letters.upper())
-    start_row_index = int(numbers) - 1
+    if ':' in cells:
+        start, end = cells.split(sep=':', maxsplit=1)
+    else:
+        start = end = cells
+
+    start_letters, start_numbers = split_cell_string(start)
+    start_column_index = column_letter_to_number(start_letters.upper())
+    start_row_index = int(start_numbers) - 1
+
+    end_letters, end_numbers = split_cell_string(end)
+    end_column_index = column_letter_to_number(end_letters.upper()) + 1
+    end_row_index = int(end_numbers)
 
     return {
         "sheetId": sheet_id,
         "startColumnIndex": start_column_index,
         "startRowIndex": start_row_index,
-        "endColumnIndex": start_column_index + 1,
-        "endRowIndex": start_row_index + 1
+        "endColumnIndex": end_column_index,
+        "endRowIndex": end_row_index
     }
