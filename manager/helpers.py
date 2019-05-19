@@ -1,9 +1,13 @@
-def column_letter_to_number(letter):
+def column_letters_to_number(letters):
     """
-    Convert a single column letter to a zero-indexed number.
+    Convert a column in letters to a zero-indexed number.
     """
-    # Convert to ASCII and reduce A to 0:
-    return ord(letter) - 65
+    total = 0
+    remaining_letters = letters
+    while len(remaining_letters) > 0:
+        current_letter, *remaining_letters = remaining_letters
+        total = (ord(current_letter) - 64) + (total * 26)
+    return total - 1
 
 
 def split_cell_string(cell):
@@ -42,11 +46,11 @@ def a1_to_range(cells, sheet_id):
         start = end = cells
 
     start_letters, start_numbers = split_cell_string(start)
-    start_column_index = column_letter_to_number(start_letters)
+    start_column_index = column_letters_to_number(start_letters)
     start_row_index = int(start_numbers) - 1
 
     end_letters, end_numbers = split_cell_string(end)
-    end_column_index = column_letter_to_number(end_letters) + 1
+    end_column_index = column_letters_to_number(end_letters) + 1
     end_row_index = int(end_numbers)
 
     return {

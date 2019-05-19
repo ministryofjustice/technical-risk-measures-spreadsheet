@@ -1,14 +1,22 @@
 import pytest
 
-from manager.helpers import column_letter_to_number, split_cell_string, a1_to_range
+from manager.helpers import column_letters_to_number, split_cell_string, a1_to_range
 
 
-def test_column_letter_to_number_A():
-    assert column_letter_to_number('A') == 0
+def test_column_letters_to_number_A():
+    assert column_letters_to_number('A') == 0
 
 
-def test_column_letter_to_number_B():
-    assert column_letter_to_number('B') == 1
+def test_column_letters_to_number_B():
+    assert column_letters_to_number('B') == 1
+
+
+def test_column_letters_to_number_Z():
+    assert column_letters_to_number('Z') == 25
+
+
+def test_column_letters_to_number_AC():
+    assert column_letters_to_number('AC') == 28
 
 
 def test_split_cell_string_A1():
@@ -72,3 +80,14 @@ def test_a1_to_range_C2E11():
         "endRowIndex": 11
     }
     assert a1_to_range('C2:E11', 5) == expected_range
+
+
+def test_a1_to_range_A2AC2():
+    expected_range = {
+        "sheetId": 123,
+        "startColumnIndex": 0,
+        "startRowIndex": 1,
+        "endColumnIndex": 29,
+        "endRowIndex": 2
+    }
+    assert a1_to_range('A2:AC2', 123) == expected_range
