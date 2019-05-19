@@ -54,6 +54,25 @@ def try_reading(service):
             print(row)
 
 
+def apply_batch(service, requests):
+    """
+    Apply multiple updates in a single batch.
+
+    `requests` should be a list of Request objects representing batch update
+    operations, as described here:
+
+        https://developers.google.com/sheets/api/guides/batchupdate
+    """
+    body = {
+        'requests': requests
+    }
+    service.spreadsheets().batchUpdate(
+        spreadsheetId=SPREADSHEET_ID,
+        body=body).execute()
+
+    print('Spreadsheet updated')
+
+
 def try_writing(service):
     requests = []
 
@@ -83,14 +102,7 @@ def try_writing(service):
         }
     })
 
-    body = {
-        'requests': requests
-    }
-    service.spreadsheets().batchUpdate(
-        spreadsheetId=SPREADSHEET_ID,
-        body=body).execute()
-
-    print('Spreadsheet cell values updated')
+    apply_batch(service, requests)
 
 
 def main():
