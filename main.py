@@ -5,6 +5,8 @@ from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from google.oauth2 import service_account
 
+import batch_requests
+
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
@@ -74,34 +76,7 @@ def apply_batch(service, requests):
 
 
 def try_writing(service):
-    requests = []
-
-    range = {
-        "sheetId": SHEET_ID,
-        "startColumnIndex": 2,
-        "startRowIndex": 2,
-        "endColumnIndex": 4,
-        "endRowIndex": 4
-    }
-    rows = [
-        {'values': [
-            {'userEnteredValue': {'stringValue': 'Can'}},
-            {'userEnteredValue': {'stringValue': 'I'}}
-        ]},
-        {'values': [
-            {'userEnteredValue': {'stringValue': 'write'}},
-            {'userEnteredValue': {'stringValue': 'here?'}}
-        ]}
-    ]
-
-    requests.append({
-        'updateCells': {
-            'fields': '*',
-            'range': range,
-            'rows': rows
-        }
-    })
-
+    requests = [batch_requests.test_write_request(SHEET_ID)]
     apply_batch(service, requests)
 
 
