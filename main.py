@@ -39,6 +39,20 @@ def get_creds():
     return creds
 
 
+def try_reading(service):
+    # Call the Sheets API
+    sheet = service.spreadsheets()
+    result = sheet.values().get(spreadsheetId=SPREADSHEET_ID,
+                                range=RANGE_NAME_READ).execute()
+    values = result.get('values', [])
+
+    if not values:
+        print('No data found.')
+    else:
+        for row in values:
+            print(row)
+
+
 def try_writing(service):
     requests = []
 
@@ -83,18 +97,7 @@ def main():
     """
     service = build('sheets', 'v4', credentials=get_creds())
 
-    # Call the Sheets API
-    sheet = service.spreadsheets()
-    result = sheet.values().get(spreadsheetId=SPREADSHEET_ID,
-                                range=RANGE_NAME_READ).execute()
-    values = result.get('values', [])
-
-    if not values:
-        print('No data found.')
-    else:
-        for row in values:
-            print(row)
-
+    try_reading(service)
     try_writing(service)
 
 
