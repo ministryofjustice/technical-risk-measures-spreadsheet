@@ -375,6 +375,36 @@ def add_conditional_formatting_people_amber_request(sheet_id):
     return request
 
 
+def add_conditional_formatting_people_green_request(sheet_id):
+    request = {
+        "addConditionalFormatRule": {
+            "index": 2,
+            "rule": {
+                "ranges": [
+                    a1_to_range('B3:B1000', sheet_id)
+                ],
+                "booleanRule": {
+                    "condition": {
+                        "values": [
+                            {"userEnteredValue": "=OR((G3>=2), AND(EQ(G3,1), H3>=2), AND(EQ(G3,1), EQ(I3,TRUE)))"},
+                        ],
+                        "type": "CUSTOM_FORMULA",
+                    },
+                    "format": {
+                        "backgroundColor": {
+                            "blue": 0,
+                            "green": 1,
+                            "red": 0,
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return request
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -397,5 +427,6 @@ def all_requests_in_order(sheet_id):
     requests.extend(set_borders(sheet_id))
     requests.append(add_conditional_formatting_people_red_request(sheet_id))
     requests.append(add_conditional_formatting_people_amber_request(sheet_id))
+    requests.append(add_conditional_formatting_people_green_request(sheet_id))
 
     return requests
