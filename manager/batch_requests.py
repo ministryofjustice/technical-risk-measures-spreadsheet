@@ -1,4 +1,5 @@
-from helpers import a1_to_range, red_background, amber_background, green_background
+from helpers import a1_to_range, red_background, amber_background, \
+    green_background, add_conditional_formatting_request
 
 
 def test_write_request(sheet_id):
@@ -316,75 +317,30 @@ def set_borders(sheet_id):
 
 
 def add_conditional_formatting_people_red_request(sheet_id):
-    request = {
-        "addConditionalFormatRule": {
-            "index": 0,
-            "rule": {
-                "ranges": [
-                    a1_to_range('B3:B1000', sheet_id)
-                ],
-                "booleanRule": {
-                    "condition": {
-                        "values": [
-                            {"userEnteredValue": "=AND(EQ(G3,0), EQ(H3,0), EQ(I3,FALSE))"},
-                        ],
-                        "type": "CUSTOM_FORMULA",
-                    },
-                    "format": red_background
-                }
-            }
-        }
-    }
+    index = 0
+    range = a1_to_range('B3:B1000', sheet_id)
+    formula = "=AND(EQ(G3,0), EQ(H3,0), EQ(I3,FALSE))"
+    values = [{"userEnteredValue": formula}]
 
-    return request
+    return add_conditional_formatting_request(index, range, values, red_background)
 
 
 def add_conditional_formatting_people_amber_request(sheet_id):
-    request = {
-        "addConditionalFormatRule": {
-            "index": 1,
-            "rule": {
-                "ranges": [
-                    a1_to_range('B3:B1000', sheet_id)
-                ],
-                "booleanRule": {
-                    "condition": {
-                        "values": [
-                            {"userEnteredValue": "=OR(AND(EQ(G3,1), EQ(H3,0), EQ(I3,FALSE)), AND(EQ(G3,0), (H3>=1), EQ(I3,FALSE)), AND(EQ(G3,0), EQ(H3,0), EQ(I3,TRUE)), AND(EQ(G3,1), EQ(H3,1), EQ(I3,FALSE)))"},
-                        ],
-                        "type": "CUSTOM_FORMULA",
-                    },
-                    "format": amber_background
-                }
-            }
-        }
-    }
+    index = 1
+    range = a1_to_range('B3:B1000', sheet_id)
+    formula = "=OR(AND(EQ(G3,1), EQ(H3,0), EQ(I3,FALSE)), AND(EQ(G3,0), (H3>=1), EQ(I3,FALSE)), AND(EQ(G3,0), EQ(H3,0), EQ(I3,TRUE)), AND(EQ(G3,1), EQ(H3,1), EQ(I3,FALSE)))"
+    values = [{"userEnteredValue": formula}]
 
-    return request
+    return add_conditional_formatting_request(index, range, values, amber_background)
 
 
 def add_conditional_formatting_people_green_request(sheet_id):
-    request = {
-        "addConditionalFormatRule": {
-            "index": 2,
-            "rule": {
-                "ranges": [
-                    a1_to_range('B3:B1000', sheet_id)
-                ],
-                "booleanRule": {
-                    "condition": {
-                        "values": [
-                            {"userEnteredValue": "=OR((G3>=2), AND(EQ(G3,1), H3>=2), AND(EQ(G3,1), EQ(I3,TRUE)))"},
-                        ],
-                        "type": "CUSTOM_FORMULA",
-                    },
-                    "format": green_background
-                }
-            }
-        }
-    }
+    index = 2
+    range = a1_to_range('B3:B1000', sheet_id)
+    formula = "=OR((G3>=2), AND(EQ(G3,1), H3>=2), AND(EQ(G3,1), EQ(I3,TRUE)))"
+    values = [{"userEnteredValue": formula}]
 
-    return request
+    return add_conditional_formatting_request(index, range, values, green_background)
 
 
 def all_requests_in_order(sheet_id):

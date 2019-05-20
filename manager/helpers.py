@@ -87,3 +87,24 @@ green_background = {
         "red": 0,
     }
 }
+
+
+def add_conditional_formatting_request(index, range, values, format):
+    """
+    Build a request to add a conditional formatting rule using a custom formula.
+    """
+    return {
+        "addConditionalFormatRule": {
+            "index": index,
+            "rule": {
+                "ranges": [range],
+                "booleanRule": {
+                    "condition": {
+                        "values": values,
+                        "type": "CUSTOM_FORMULA",
+                    },
+                    "format": format
+                }
+            }
+        }
+    }
