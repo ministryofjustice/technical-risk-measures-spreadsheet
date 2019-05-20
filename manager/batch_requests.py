@@ -288,6 +288,33 @@ def set_data_validation_preventing_degradation_request(sheet_id):
     return request
 
 
+def set_borders(sheet_id):
+    ranges = [
+        a1_to_range('B1:B1000', sheet_id),
+        a1_to_range('E1:E1000', sheet_id),
+        a1_to_range('G1:G1000', sheet_id),
+        a1_to_range('J1:J1000', sheet_id),
+        a1_to_range('W1:W1000', sheet_id),
+    ]
+    requests = [
+        {
+            "updateBorders": {
+                "range": range,
+                "left": {
+                    "color": {
+                        "red": 0.0,
+                        "green": 0.0,
+                        "blue": 0.0
+                    },
+                    "style": "SOLID_MEDIUM"
+                },
+            }
+        } for range in ranges
+    ]
+
+    return requests
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -307,5 +334,6 @@ def all_requests_in_order(sheet_id):
     requests.append(set_data_validation_number_of_security_risks_request(sheet_id))
     requests.append(set_data_validation_atrophy_dates_request(sheet_id))
     requests.append(set_data_validation_preventing_degradation_request(sheet_id))
+    requests.extend(set_borders(sheet_id))
 
     return requests
