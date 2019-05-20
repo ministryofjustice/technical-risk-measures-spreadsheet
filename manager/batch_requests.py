@@ -1,4 +1,4 @@
-from helpers import a1_to_range
+from helpers import a1_to_range, red_background, amber_background, green_background
 
 
 def test_write_request(sheet_id):
@@ -330,13 +330,7 @@ def add_conditional_formatting_people_red_request(sheet_id):
                         ],
                         "type": "CUSTOM_FORMULA",
                     },
-                    "format": {
-                        "backgroundColor": {
-                            "blue": 0,
-                            "green": 0,
-                            "red": 1,
-                        }
-                    }
+                    "format": red_background
                 }
             }
         }
@@ -360,13 +354,7 @@ def add_conditional_formatting_people_amber_request(sheet_id):
                         ],
                         "type": "CUSTOM_FORMULA",
                     },
-                    "format": {
-                        "backgroundColor": {
-                            "blue": 0,
-                            "green": 0.6,
-                            "red": 1,
-                        }
-                    }
+                    "format": amber_background
                 }
             }
         }
@@ -390,13 +378,7 @@ def add_conditional_formatting_people_green_request(sheet_id):
                         ],
                         "type": "CUSTOM_FORMULA",
                     },
-                    "format": {
-                        "backgroundColor": {
-                            "blue": 0,
-                            "green": 1,
-                            "red": 0,
-                        }
-                    }
+                    "format": green_background
                 }
             }
         }

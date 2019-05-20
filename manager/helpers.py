@@ -60,3 +60,30 @@ def a1_to_range(cells, sheet_id):
         "endColumnIndex": end_column_index,
         "endRowIndex": end_row_index
     }
+
+
+red_background = {
+    "backgroundColor": {
+        "blue": 0,
+        "green": 0,
+        "red": 1,
+    }
+}
+
+
+amber_background = {
+    "backgroundColor": {
+        "blue": 0,
+        "green": 0.6,
+        "red": 1,
+    }
+}
+
+
+green_background = {
+    "backgroundColor": {
+        "blue": 0,
+        "green": 1,
+        "red": 0,
+    }
+}
