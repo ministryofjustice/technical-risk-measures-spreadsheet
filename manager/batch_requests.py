@@ -154,6 +154,140 @@ def write_second_header_row_request(sheet_id):
     }
 
 
+def set_data_validation_number_of_people_request(sheet_id):
+    range = a1_to_range('G3:H1000', sheet_id)
+    request = {
+        "setDataValidation": {
+            "range": range,
+            "rule": {
+                "showCustomUi": False,
+                "strict": False,
+                "condition": {
+                    "values": [
+                        {"userEnteredValue": "0"},
+                        {"userEnteredValue": "100"},
+                    ],
+                    "type": "NUMBER_BETWEEN",
+                },
+            },
+        }
+    }
+
+    return request
+
+
+def set_data_validation_managed_service_request(sheet_id):
+    range = a1_to_range('I3:I1000', sheet_id)
+    request = {
+        "setDataValidation": {
+            "range": range,
+            "rule": {
+                "showCustomUi": False,
+                "strict": False,
+                "condition": {
+                    "type": "BOOLEAN",
+                },
+            },
+        }
+    }
+
+    return request
+
+
+def set_data_validation_tech_boolean_criteria_request(sheet_id):
+    range = a1_to_range('J3:S1000', sheet_id)
+    request = {
+        "setDataValidation": {
+            "range": range,
+            "rule": {
+                "showCustomUi": False,
+                "strict": False,
+                "condition": {
+                    "type": "BOOLEAN",
+                },
+            },
+        }
+    }
+
+    return request
+
+
+def set_data_validation_risk_register_updated_request(sheet_id):
+    range = a1_to_range('T3:T1000', sheet_id)
+    request = {
+        "setDataValidation": {
+            "range": range,
+            "rule": {
+                "showCustomUi": False,
+                "strict": False,
+                "condition": {
+                    "type": "DATE_IS_VALID",
+                },
+            },
+        }
+    }
+
+    return request
+
+
+def set_data_validation_number_of_security_risks_request(sheet_id):
+    range = a1_to_range('U3:V1000', sheet_id)
+    request = {
+        "setDataValidation": {
+            "range": range,
+            "rule": {
+                "showCustomUi": False,
+                "strict": False,
+                "condition": {
+                    "values": [
+                        {"userEnteredValue": "0"},
+                        {"userEnteredValue": "500"},
+                    ],
+                    "type": "NUMBER_BETWEEN",
+                },
+            },
+        }
+    }
+
+    return request
+
+
+def set_data_validation_atrophy_dates_request(sheet_id):
+    range = a1_to_range('W3:AB1000', sheet_id)
+    request = {
+        "setDataValidation": {
+            "range": range,
+            "rule": {
+                "showCustomUi": False,
+                "strict": False,
+                "condition": {
+                    "type": "DATE_IS_VALID",
+                },
+            },
+        }
+    }
+
+    return request
+
+
+def set_data_validation_preventing_degradation_request(sheet_id):
+    range = a1_to_range('AC3:AC1000', sheet_id)
+    request = {
+        "setDataValidation": {
+            "range": range,
+            "rule": {
+                "showCustomUi": False,
+                "strict": False,
+                "condition": {
+                    "type": "BOOLEAN",
+                },
+            },
+        }
+    }
+
+    return request
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -166,5 +300,12 @@ def all_requests_in_order(sheet_id):
     requests.extend(merge_header_row_cells(sheet_id))
     requests.extend(write_first_header_rows(sheet_id))
     requests.append(write_second_header_row_request(sheet_id))
+    requests.append(set_data_validation_number_of_people_request(sheet_id))
+    requests.append(set_data_validation_managed_service_request(sheet_id))
+    requests.append(set_data_validation_tech_boolean_criteria_request(sheet_id))
+    requests.append(set_data_validation_risk_register_updated_request(sheet_id))
+    requests.append(set_data_validation_number_of_security_risks_request(sheet_id))
+    requests.append(set_data_validation_atrophy_dates_request(sheet_id))
+    requests.append(set_data_validation_preventing_degradation_request(sheet_id))
 
     return requests
