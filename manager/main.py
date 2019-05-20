@@ -72,12 +72,40 @@ def apply_batch(service, requests):
         spreadsheetId=SPREADSHEET_ID,
         body=body).execute()
 
-    print('Spreadsheet updated')
-
 
 def try_writing(service):
     requests = [batch_requests.test_write_request(SHEET_ID)]
     apply_batch(service, requests)
+
+
+def delete_all_existing_conditional_formatting_rules(service):
+    """
+    Find out how many existing rules are on the sheet, then delete them all.
+
+    There's no API support for passing the complete list of rules to set, sadly.
+    Modifying existing rules in place would be really fiddly, mainly because
+    the API only supports adding and updating operations on individual rules.
+    So delete them all each time before setting the current rules.
+    """
+    data = service.spreadsheets().get(
+        spreadsheetId=SPREADSHEET_ID,
+        includeGridData=False
+    ).execute()
+
+    sheet = [s for s in data['sheets'] if s['properties']['sheetId'] == int(SHEET_ID)][0]
+    number_of_rules_to_delete = len(sheet.get('conditionalFormats', []))
+
+    if number_of_rules_to_delete > 0:
+        print(f"Deleting {number_of_rules_to_delete} existing conditional formatting rules")
+        requests = [
+            {
+                "deleteConditionalFormatRule": {
+                    "sheetId": SHEET_ID,
+                    "index": 0
+                }
+            } for n in range(number_of_rules_to_delete)
+        ]
+        apply_batch(service, requests)
 
 
 def main():
@@ -85,8 +113,11 @@ def main():
     """
     service = build('sheets', 'v4', credentials=get_creds())
 
+    delete_all_existing_conditional_formatting_rules(service)
+
     requests = batch_requests.all_requests_in_order(SHEET_ID)
     apply_batch(service, requests)
+    print('Spreadsheet updated')
 
 
 if __name__ == '__main__':
