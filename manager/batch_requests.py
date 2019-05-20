@@ -315,6 +315,36 @@ def set_borders(sheet_id):
     return requests
 
 
+def add_conditional_formatting_people_red_request(sheet_id):
+    request = {
+        "addConditionalFormatRule": {
+            "index": 0,
+            "rule": {
+                "ranges": [
+                    a1_to_range('B3:B1000', sheet_id)
+                ],
+                "booleanRule": {
+                    "condition": {
+                        "values": [
+                            {"userEnteredValue": "=AND(EQ(G3,0), EQ(H3,0), EQ(I3,FALSE))"},
+                        ],
+                        "type": "CUSTOM_FORMULA",
+                    },
+                    "format": {
+                        "backgroundColor": {
+                            "blue": 0,
+                            "green": 0,
+                            "red": 1,
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return request
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -335,5 +365,6 @@ def all_requests_in_order(sheet_id):
     requests.append(set_data_validation_atrophy_dates_request(sheet_id))
     requests.append(set_data_validation_preventing_degradation_request(sheet_id))
     requests.extend(set_borders(sheet_id))
+    requests.append(add_conditional_formatting_people_red_request(sheet_id))
 
     return requests
