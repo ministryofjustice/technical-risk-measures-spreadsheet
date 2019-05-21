@@ -297,6 +297,37 @@ def set_borders(sheet_id):
     return requests
 
 
+def set_default_green_background_tech_atrophy_summaries_request(sheet_id):
+    """
+    The tech and atrophy summary columns have a green background by default.
+
+    Conditional formatting rules override this for red and amber.
+
+    We need to pass values for every cell in the range we're updating, hence the
+    two list comprehensions.
+    """
+    cell_range = a1_to_range('C3:D1000', sheet_id)
+    rows = [
+        {
+            'values': [
+                {'userEnteredFormat':
+                    {
+                        "backgroundColor": green_background['backgroundColor'],
+                    }
+                } for n in range(2)
+            ]
+        } for n in range(997)
+    ]
+
+    return {
+        'updateCells': {
+            'fields': '*',
+            'range': cell_range,
+            'rows': rows
+        }
+    }
+
+
 def add_conditional_formatting_people_red_request(sheet_id):
     index = 0
     range = a1_to_range('B3:B1000', sheet_id)
@@ -387,6 +418,7 @@ def all_requests_in_order(sheet_id):
     requests.append(set_data_validation_atrophy_dates_request(sheet_id))
     requests.append(set_data_validation_preventing_degradation_request(sheet_id))
     requests.extend(set_borders(sheet_id))
+    requests.append(set_default_green_background_tech_atrophy_summaries_request(sheet_id))
     requests.append(add_conditional_formatting_people_red_request(sheet_id))
     requests.append(add_conditional_formatting_people_amber_request(sheet_id))
     requests.append(add_conditional_formatting_people_green_request(sheet_id))
