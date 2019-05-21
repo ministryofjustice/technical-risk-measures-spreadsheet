@@ -358,6 +358,16 @@ def add_conditional_formatting_tech_red(sheet_id):
     return requests
 
 
+def add_conditional_formatting_tech_amber_request(sheet_id):
+    # Number of medium risks
+    index = 7
+    range = a1_to_range('C3:C1000', sheet_id)
+    formula = "=AND(T3 >= 2, T3 <= 5)"
+    values = [{"userEnteredValue": formula}]
+
+    return add_conditional_formatting_request(index, range, values, amber_background)
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -381,5 +391,6 @@ def all_requests_in_order(sheet_id):
     requests.append(add_conditional_formatting_people_amber_request(sheet_id))
     requests.append(add_conditional_formatting_people_green_request(sheet_id))
     requests.extend(add_conditional_formatting_tech_red(sheet_id))
+    requests.append(add_conditional_formatting_tech_amber_request(sheet_id))
 
     return requests
