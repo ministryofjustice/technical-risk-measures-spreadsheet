@@ -31,8 +31,8 @@ def merge_header_row_cells(sheet_id):
     ranges = [
         a1_to_range('B1:D1', sheet_id),
         a1_to_range('G1:I1', sheet_id),
-        a1_to_range('J1:V1', sheet_id),
-        a1_to_range('W1:AC1', sheet_id),
+        a1_to_range('J1:U1', sheet_id),
+        a1_to_range('V1:AB1', sheet_id),
     ]
 
     requests = [
@@ -91,7 +91,7 @@ def write_first_header_rows(sheet_id):
         {
             'updateCells': {
                 'fields': '*',
-                'range': a1_to_range('W1', sheet_id),
+                'range': a1_to_range('V1', sheet_id),
                 'rows': [
                     {'values': [
                         {'userEnteredValue': {'stringValue': 'Atrophy criteria'}}
@@ -108,7 +108,7 @@ def write_second_header_row_request(sheet_id):
     """
     Write the second header row values.
     """
-    range = a1_to_range('A2:AC2', sheet_id)
+    range = a1_to_range('A2:AB2', sheet_id)
     values = [
         'Service',
         'People summary',
@@ -128,8 +128,7 @@ def write_second_header_row_request(sheet_id):
         'Logs are aggregated and searchable?',
         'Application has a backup/recovery strategy?',
         'Code base can be easily changed?',
-        'Has a risk register?',
-        'When was the risk register last updated?',
+        'Team has a good understanding of application\'s security?',
         'Number of medium security risks',
         'Number of high security risks',
         'When do licences expire?',
@@ -213,26 +212,8 @@ def set_data_validation_tech_boolean_criteria_request(sheet_id):
     return request
 
 
-def set_data_validation_risk_register_updated_request(sheet_id):
-    range = a1_to_range('T3:T1000', sheet_id)
-    request = {
-        "setDataValidation": {
-            "range": range,
-            "rule": {
-                "showCustomUi": False,
-                "strict": False,
-                "condition": {
-                    "type": "DATE_IS_VALID",
-                },
-            },
-        }
-    }
-
-    return request
-
-
 def set_data_validation_number_of_security_risks_request(sheet_id):
-    range = a1_to_range('U3:V1000', sheet_id)
+    range = a1_to_range('T3:U1000', sheet_id)
     request = {
         "setDataValidation": {
             "range": range,
@@ -254,7 +235,7 @@ def set_data_validation_number_of_security_risks_request(sheet_id):
 
 
 def set_data_validation_atrophy_dates_request(sheet_id):
-    range = a1_to_range('W3:AB1000', sheet_id)
+    range = a1_to_range('V3:AA1000', sheet_id)
     request = {
         "setDataValidation": {
             "range": range,
@@ -272,7 +253,7 @@ def set_data_validation_atrophy_dates_request(sheet_id):
 
 
 def set_data_validation_preventing_degradation_request(sheet_id):
-    range = a1_to_range('AC3:AC1000', sheet_id)
+    range = a1_to_range('AB3:AB1000', sheet_id)
     request = {
         "setDataValidation": {
             "range": range,
@@ -295,7 +276,7 @@ def set_borders(sheet_id):
         a1_to_range('E1:E1000', sheet_id),
         a1_to_range('G1:G1000', sheet_id),
         a1_to_range('J1:J1000', sheet_id),
-        a1_to_range('W1:W1000', sheet_id),
+        a1_to_range('V1:V1000', sheet_id),
     ]
     requests = [
         {
@@ -358,7 +339,6 @@ def all_requests_in_order(sheet_id):
     requests.append(set_data_validation_number_of_people_request(sheet_id))
     requests.append(set_data_validation_managed_service_request(sheet_id))
     requests.append(set_data_validation_tech_boolean_criteria_request(sheet_id))
-    requests.append(set_data_validation_risk_register_updated_request(sheet_id))
     requests.append(set_data_validation_number_of_security_risks_request(sheet_id))
     requests.append(set_data_validation_atrophy_dates_request(sheet_id))
     requests.append(set_data_validation_preventing_degradation_request(sheet_id))
