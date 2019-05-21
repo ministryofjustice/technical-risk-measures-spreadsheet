@@ -324,6 +324,40 @@ def add_conditional_formatting_people_green_request(sheet_id):
     return add_conditional_formatting_request(index, range, values, green_background)
 
 
+def add_conditional_formatting_tech_red(sheet_id):
+    requests = []
+
+    # Tech binary criteria - ease and risk of making changes
+    index = 3
+    range = a1_to_range('C3:C1000', sheet_id)
+    formula = "=COUNTIF(J3:R3,\"FALSE\") >= 2"
+    values = [{"userEnteredValue": formula}]
+    requests.append(add_conditional_formatting_request(index, range, values, red_background))
+
+    # Understanding of security
+    index = 4
+    range = a1_to_range('C3:C1000', sheet_id)
+    formula = "=EQ(S3, FALSE)"
+    values = [{"userEnteredValue": formula}]
+    requests.append(add_conditional_formatting_request(index, range, values, red_background))
+
+    # Number of medium risks
+    index = 5
+    range = a1_to_range('C3:C1000', sheet_id)
+    formula = "=T3 > 5"
+    values = [{"userEnteredValue": formula}]
+    requests.append(add_conditional_formatting_request(index, range, values, red_background))
+
+    # Number of high risks
+    index = 6
+    range = a1_to_range('C3:C1000', sheet_id)
+    formula = "=U3 >= 1"
+    values = [{"userEnteredValue": formula}]
+    requests.append(add_conditional_formatting_request(index, range, values, red_background))
+
+    return requests
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -346,5 +380,6 @@ def all_requests_in_order(sheet_id):
     requests.append(add_conditional_formatting_people_red_request(sheet_id))
     requests.append(add_conditional_formatting_people_amber_request(sheet_id))
     requests.append(add_conditional_formatting_people_green_request(sheet_id))
+    requests.extend(add_conditional_formatting_tech_red(sheet_id))
 
     return requests
