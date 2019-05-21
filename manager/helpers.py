@@ -89,7 +89,7 @@ green_background = {
 }
 
 
-def add_conditional_formatting_request(index, range, values, format):
+def add_conditional_formatting_request(index, cell_range, values, format):
     """
     Build a request to add a conditional formatting rule using a custom formula.
     """
@@ -97,7 +97,7 @@ def add_conditional_formatting_request(index, range, values, format):
         "addConditionalFormatRule": {
             "index": index,
             "rule": {
-                "ranges": [range],
+                "ranges": [cell_range],
                 "booleanRule": {
                     "condition": {
                         "values": values,

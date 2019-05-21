@@ -6,7 +6,7 @@ def test_write_request(sheet_id):
     """
     Test writing to a sheet, mainly to check we have permission to write.
     """
-    range = a1_to_range('C3:D4', sheet_id)
+    cell_range = a1_to_range('C3:D4', sheet_id)
     rows = [
         {'values': [
             {'userEnteredValue': {'stringValue': 'Can'}},
@@ -21,14 +21,14 @@ def test_write_request(sheet_id):
     return {
         'updateCells': {
             'fields': '*',
-            'range': range,
+            'range': cell_range,
             'rows': rows
         }
     }
 
 
 def merge_header_row_cells(sheet_id):
-    ranges = [
+    cell_ranges = [
         a1_to_range('B1:D1', sheet_id),
         a1_to_range('G1:I1', sheet_id),
         a1_to_range('J1:U1', sheet_id),
@@ -38,11 +38,11 @@ def merge_header_row_cells(sheet_id):
     requests = [
         {
             'mergeCells': {
-                'range': range,
+                'range': cell_range,
                 'mergeType': 'MERGE_ALL'
             }
         }
-        for range in ranges
+        for cell_range in cell_ranges
     ]
     return requests
 
@@ -108,7 +108,7 @@ def write_second_header_row_request(sheet_id):
     """
     Write the second header row values.
     """
-    range = a1_to_range('A2:AB2', sheet_id)
+    cell_range = a1_to_range('A2:AB2', sheet_id)
     values = [
         'Service',
         'People summary',
@@ -148,17 +148,17 @@ def write_second_header_row_request(sheet_id):
     return {
         'updateCells': {
             'fields': '*',
-            'range': range,
+            'range': cell_range,
             'rows': rows
         }
     }
 
 
 def set_data_validation_number_of_people_request(sheet_id):
-    range = a1_to_range('G3:H1000', sheet_id)
+    cell_range = a1_to_range('G3:H1000', sheet_id)
     request = {
         "setDataValidation": {
-            "range": range,
+            "range": cell_range,
             "rule": {
                 "showCustomUi": False,
                 "strict": False,
@@ -177,10 +177,10 @@ def set_data_validation_number_of_people_request(sheet_id):
 
 
 def set_data_validation_managed_service_request(sheet_id):
-    range = a1_to_range('I3:I1000', sheet_id)
+    cell_range = a1_to_range('I3:I1000', sheet_id)
     request = {
         "setDataValidation": {
-            "range": range,
+            "range": cell_range,
             "rule": {
                 "showCustomUi": False,
                 "strict": False,
@@ -195,10 +195,10 @@ def set_data_validation_managed_service_request(sheet_id):
 
 
 def set_data_validation_tech_boolean_criteria_request(sheet_id):
-    range = a1_to_range('J3:S1000', sheet_id)
+    cell_range = a1_to_range('J3:S1000', sheet_id)
     request = {
         "setDataValidation": {
-            "range": range,
+            "range": cell_range,
             "rule": {
                 "showCustomUi": False,
                 "strict": False,
@@ -213,10 +213,10 @@ def set_data_validation_tech_boolean_criteria_request(sheet_id):
 
 
 def set_data_validation_number_of_security_risks_request(sheet_id):
-    range = a1_to_range('T3:U1000', sheet_id)
+    cell_range = a1_to_range('T3:U1000', sheet_id)
     request = {
         "setDataValidation": {
-            "range": range,
+            "range": cell_range,
             "rule": {
                 "showCustomUi": False,
                 "strict": False,
@@ -235,10 +235,10 @@ def set_data_validation_number_of_security_risks_request(sheet_id):
 
 
 def set_data_validation_atrophy_dates_request(sheet_id):
-    range = a1_to_range('V3:AA1000', sheet_id)
+    cell_range = a1_to_range('V3:AA1000', sheet_id)
     request = {
         "setDataValidation": {
-            "range": range,
+            "range": cell_range,
             "rule": {
                 "showCustomUi": False,
                 "strict": False,
@@ -253,10 +253,10 @@ def set_data_validation_atrophy_dates_request(sheet_id):
 
 
 def set_data_validation_preventing_degradation_request(sheet_id):
-    range = a1_to_range('AB3:AB1000', sheet_id)
+    cell_range = a1_to_range('AB3:AB1000', sheet_id)
     request = {
         "setDataValidation": {
-            "range": range,
+            "range": cell_range,
             "rule": {
                 "showCustomUi": False,
                 "strict": False,
@@ -271,7 +271,7 @@ def set_data_validation_preventing_degradation_request(sheet_id):
 
 
 def set_borders(sheet_id):
-    ranges = [
+    cell_ranges = [
         a1_to_range('B1:B1000', sheet_id),
         a1_to_range('E1:E1000', sheet_id),
         a1_to_range('G1:G1000', sheet_id),
@@ -281,7 +281,7 @@ def set_borders(sheet_id):
     requests = [
         {
             "updateBorders": {
-                "range": range,
+                "range": cell_range,
                 "left": {
                     "color": {
                         "red": 0.0,
@@ -291,7 +291,7 @@ def set_borders(sheet_id):
                     "style": "SOLID_MEDIUM"
                 },
             }
-        } for range in ranges
+        } for cell_range in cell_ranges
     ]
 
     return requests
@@ -330,29 +330,29 @@ def set_default_green_background_tech_atrophy_summaries_request(sheet_id):
 
 def add_conditional_formatting_people_red_request(sheet_id):
     index = 0
-    range = a1_to_range('B3:B1000', sheet_id)
+    cell_range = a1_to_range('B3:B1000', sheet_id)
     formula = "=AND(EQ(G3,0), EQ(H3,0), EQ(I3,FALSE))"
     values = [{"userEnteredValue": formula}]
 
-    return add_conditional_formatting_request(index, range, values, red_background)
+    return add_conditional_formatting_request(index, cell_range, values, red_background)
 
 
 def add_conditional_formatting_people_amber_request(sheet_id):
     index = 1
-    range = a1_to_range('B3:B1000', sheet_id)
+    cell_range = a1_to_range('B3:B1000', sheet_id)
     formula = "=OR(AND(EQ(G3,1), EQ(H3,0), EQ(I3,FALSE)), AND(EQ(G3,0), (H3>=1), EQ(I3,FALSE)), AND(EQ(G3,0), EQ(H3,0), EQ(I3,TRUE)), AND(EQ(G3,1), EQ(H3,1), EQ(I3,FALSE)))"
     values = [{"userEnteredValue": formula}]
 
-    return add_conditional_formatting_request(index, range, values, amber_background)
+    return add_conditional_formatting_request(index, cell_range, values, amber_background)
 
 
 def add_conditional_formatting_people_green_request(sheet_id):
     index = 2
-    range = a1_to_range('B3:B1000', sheet_id)
+    cell_range = a1_to_range('B3:B1000', sheet_id)
     formula = "=OR((G3>=2), AND(EQ(G3,1), H3>=2), AND(EQ(G3,1), EQ(I3,TRUE)))"
     values = [{"userEnteredValue": formula}]
 
-    return add_conditional_formatting_request(index, range, values, green_background)
+    return add_conditional_formatting_request(index, cell_range, values, green_background)
 
 
 def add_conditional_formatting_tech_red(sheet_id):
@@ -360,31 +360,31 @@ def add_conditional_formatting_tech_red(sheet_id):
 
     # Tech binary criteria - ease and risk of making changes
     index = 3
-    range = a1_to_range('C3:C1000', sheet_id)
+    cell_range = a1_to_range('C3:C1000', sheet_id)
     formula = "=COUNTIF(J3:R3,\"FALSE\") >= 2"
     values = [{"userEnteredValue": formula}]
-    requests.append(add_conditional_formatting_request(index, range, values, red_background))
+    requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
     # Understanding of security
     index = 4
-    range = a1_to_range('C3:C1000', sheet_id)
+    cell_range = a1_to_range('C3:C1000', sheet_id)
     formula = "=EQ(S3, FALSE)"
     values = [{"userEnteredValue": formula}]
-    requests.append(add_conditional_formatting_request(index, range, values, red_background))
+    requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
     # Number of medium risks
     index = 5
-    range = a1_to_range('C3:C1000', sheet_id)
+    cell_range = a1_to_range('C3:C1000', sheet_id)
     formula = "=T3 > 5"
     values = [{"userEnteredValue": formula}]
-    requests.append(add_conditional_formatting_request(index, range, values, red_background))
+    requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
     # Number of high risks
     index = 6
-    range = a1_to_range('C3:C1000', sheet_id)
+    cell_range = a1_to_range('C3:C1000', sheet_id)
     formula = "=U3 >= 1"
     values = [{"userEnteredValue": formula}]
-    requests.append(add_conditional_formatting_request(index, range, values, red_background))
+    requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
     return requests
 
@@ -392,11 +392,11 @@ def add_conditional_formatting_tech_red(sheet_id):
 def add_conditional_formatting_tech_amber_request(sheet_id):
     # Number of medium risks
     index = 7
-    range = a1_to_range('C3:C1000', sheet_id)
+    cell_range = a1_to_range('C3:C1000', sheet_id)
     formula = "=AND(T3 >= 2, T3 <= 5)"
     values = [{"userEnteredValue": formula}]
 
-    return add_conditional_formatting_request(index, range, values, amber_background)
+    return add_conditional_formatting_request(index, cell_range, values, amber_background)
 
 
 def all_requests_in_order(sheet_id):
