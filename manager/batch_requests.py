@@ -399,6 +399,61 @@ def add_conditional_formatting_tech_amber_request(sheet_id):
     return add_conditional_formatting_request(index, cell_range, values, amber_background)
 
 
+def add_conditional_formatting_atrophy_red(sheet_id):
+    requests = []
+
+    # Licences expire - red if date in past
+    index = 8
+    cell_range = a1_to_range('D3:D1000', sheet_id)
+    formula = "=AND(NOT(ISBLANK(V3)), V3<TODAY())"
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
+
+    # Dependencies go out of support - red if date in past
+    index = 9
+    cell_range = a1_to_range('D3:D1000', sheet_id)
+    formula = "=AND(NOT(ISBLANK(W3)), W3<TODAY())"
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
+
+    # General dependency updates last applied - red if date more than a year ago
+    index = 10
+    cell_range = a1_to_range('D3:D1000', sheet_id)
+    formula = "=AND(NOT(ISBLANK(X3)), IF(X3<TODAY(),DATEDIF(X3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), X3, \"D\")) <= -365)"
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
+
+    # Oldest unapplied security patches released - red if date more than 6 months ago
+    index = 11
+    cell_range = a1_to_range('D3:D1000', sheet_id)
+    formula = "=AND(NOT(ISBLANK(Y3)), IF(Y3<TODAY(),DATEDIF(Y3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), Y3, \"D\")) <= (6 * 30 * -1))"
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
+
+    # Support contract expire - red if date in past
+    index = 12
+    cell_range = a1_to_range('D3:D1000', sheet_id)
+    formula = "=AND(NOT(ISBLANK(Z3)), Z3<TODAY())"
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
+
+    # Relevant legislation changes come into effect - red if date less than
+    # 3 months in the future (or already past)
+    index = 13
+    cell_range = a1_to_range('D3:D1000', sheet_id)
+    formula = "=AND(NOT(ISBLANK(AA3)), IF(AA3<TODAY(),DATEDIF(AA3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), AA3, \"D\")) <= (3 * 30))"
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
+
+    return requests
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -424,5 +479,6 @@ def all_requests_in_order(sheet_id):
     requests.append(add_conditional_formatting_people_green_request(sheet_id))
     requests.extend(add_conditional_formatting_tech_red(sheet_id))
     requests.append(add_conditional_formatting_tech_amber_request(sheet_id))
+    requests.extend(add_conditional_formatting_atrophy_red(sheet_id))
 
     return requests
