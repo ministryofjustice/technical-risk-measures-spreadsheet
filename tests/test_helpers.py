@@ -1,5 +1,6 @@
 import pytest
 
+from manager.conditional_formatting import date_in_past_condition
 from manager.helpers import column_letters_to_number, split_cell_string, a1_to_range
 
 
@@ -91,3 +92,8 @@ def test_a1_to_range_A2AC2():
         "endRowIndex": 2
     }
     assert a1_to_range('A2:AC2', 123) == expected_range
+
+
+def test_date_in_past_condition():
+    expected_formula = '=AND(NOT(ISBLANK(CD3)), CD3<TODAY())'
+    assert date_in_past_condition('CD') == expected_formula

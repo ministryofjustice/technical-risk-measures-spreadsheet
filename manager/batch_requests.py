@@ -1,3 +1,4 @@
+from conditional_formatting import date_in_past_condition
 from helpers import a1_to_range, red_background, amber_background, \
     green_background, add_conditional_formatting_request
 
@@ -405,7 +406,9 @@ def add_conditional_formatting_atrophy_red(sheet_id):
     # Licences expire - red if date in past
     index = 8
     cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(V3)), V3<TODAY())"
+
+    column = 'V'
+    formula = date_in_past_condition(column)
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
@@ -413,7 +416,8 @@ def add_conditional_formatting_atrophy_red(sheet_id):
     # Dependencies go out of support - red if date in past
     index = 9
     cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(W3)), W3<TODAY())"
+    column = 'W'
+    formula = date_in_past_condition(column)
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
@@ -437,7 +441,8 @@ def add_conditional_formatting_atrophy_red(sheet_id):
     # Support contract expire - red if date in past
     index = 12
     cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(Z3)), Z3<TODAY())"
+    column = 'Z'
+    formula = date_in_past_condition(column)
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
