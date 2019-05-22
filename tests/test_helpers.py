@@ -1,6 +1,7 @@
 import pytest
 
-from manager.conditional_formatting import date_in_past_condition, date_comparison_condition
+from manager.conditional_formatting import date_in_past_condition, \
+    date_equal_or_earlier_than_condition
 from manager.helpers import column_letters_to_number, split_cell_string, a1_to_range
 
 
@@ -99,6 +100,6 @@ def test_date_in_past_condition():
     assert date_in_past_condition('CD') == expected_formula
 
 
-def test_date_comparison_condition():
+def test_date_equal_or_earlier_than_condition():
     expected_formula = "=AND(NOT(ISBLANK(X3)), IF(X3<TODAY(),DATEDIF(X3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), X3, \"D\")) <= -365)"
-    assert date_comparison_condition('X', '<=', -365)
+    assert date_equal_or_earlier_than_condition('X', days_in_future=-365)
