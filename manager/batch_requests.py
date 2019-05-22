@@ -1,4 +1,4 @@
-from conditional_formatting import date_in_past_condition
+from conditional_formatting import date_in_past_condition, date_comparison_condition
 from helpers import a1_to_range, red_background, amber_background, \
     green_background, add_conditional_formatting_request
 
@@ -425,7 +425,7 @@ def add_conditional_formatting_atrophy_red(sheet_id):
     # General dependency updates last applied - red if date more than a year ago
     index = 10
     cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(X3)), IF(X3<TODAY(),DATEDIF(X3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), X3, \"D\")) <= -365)"
+    formula = date_comparison_condition('X', '<=', -365)
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
@@ -433,7 +433,7 @@ def add_conditional_formatting_atrophy_red(sheet_id):
     # Oldest unapplied security patches released - red if date more than 6 months ago
     index = 11
     cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(Y3)), IF(Y3<TODAY(),DATEDIF(Y3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), Y3, \"D\")) <= (6 * 30 * -1))"
+    formula = date_comparison_condition('Y', '<=', (6 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
@@ -451,7 +451,7 @@ def add_conditional_formatting_atrophy_red(sheet_id):
     # 3 months in the future (or already past)
     index = 13
     cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(AA3)), IF(AA3<TODAY(),DATEDIF(AA3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), AA3, \"D\")) <= (3 * 30))"
+    formula = date_comparison_condition('AA', '<=', (3 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
@@ -465,7 +465,7 @@ def add_conditional_formatting_atrophy_amber(sheet_id):
     # Licences expire - amber if date less than 6 months in the future (or already past)
     index = 14
     cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(V3)), IF(V3<TODAY(),DATEDIF(V3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), V3, \"D\")) <= (6 * 30))"
+    formula = date_comparison_condition('V', '<=', (6 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
@@ -473,7 +473,7 @@ def add_conditional_formatting_atrophy_amber(sheet_id):
     # Dependencies go out of support - amber if date less than 6 months in the future (or already past)
     index = 15
     cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(W3)), IF(W3<TODAY(),DATEDIF(W3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), W3, \"D\")) <= (6 * 30))"
+    formula = date_comparison_condition('W', '<=', (6 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
@@ -481,7 +481,7 @@ def add_conditional_formatting_atrophy_amber(sheet_id):
     # General dependency updates last applied - amber if date more than 6 months ago
     index = 16
     cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(X3)), IF(X3<TODAY(),DATEDIF(X3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), X3, \"D\")) <= (6 * 30 * -1))"
+    formula = date_comparison_condition('X', '<=', (6 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
@@ -489,7 +489,7 @@ def add_conditional_formatting_atrophy_amber(sheet_id):
     # Oldest unapplied security patches released - amber if date more than 3 months ago
     index = 17
     cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(Y3)), IF(Y3<TODAY(),DATEDIF(Y3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), Y3, \"D\")) <= (3 * 30 * -1))"
+    formula = date_comparison_condition('Y', '<=', (3 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
@@ -497,7 +497,7 @@ def add_conditional_formatting_atrophy_amber(sheet_id):
     # Support contract expire - amber if date less than 9 months in the future (or already past)
     index = 18
     cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(Z3)), IF(Z3<TODAY(),DATEDIF(Z3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), Z3, \"D\")) <= (9 * 30))"
+    formula = date_comparison_condition('Z', '<=', (9 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
@@ -505,7 +505,7 @@ def add_conditional_formatting_atrophy_amber(sheet_id):
     # Relevant legislation changes come into effect - amber if date less than 6 months in the future (or already past)
     index = 19
     cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(AA3)), IF(AA3<TODAY(),DATEDIF(AA3,TODAY(),\"D\")*-1,DATEDIF(TODAY(), AA3, \"D\")) <= (6 * 30))"
+    formula = date_comparison_condition('AA', '<=', (6 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
