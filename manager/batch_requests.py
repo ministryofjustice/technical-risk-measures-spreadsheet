@@ -1,7 +1,7 @@
 from conditional_formatting import date_in_past_condition, \
     date_equal_or_earlier_than_condition
 from helpers import a1_to_range, red_background, amber_background, \
-    green_background, add_conditional_formatting_request
+    green_background, add_conditional_formatting_request, light_red_background
 
 
 def test_write_request(sheet_id):
@@ -521,6 +521,21 @@ def add_conditional_formatting_atrophy_amber(sheet_id):
 
     return requests
 
+def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
+    requests = []
+
+    # Licences expire - red if date in past
+    index = 21
+    cell_range = a1_to_range('V3:V1000', sheet_id)
+
+    column = 'V'
+    formula = date_in_past_condition(column)
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+
+    return requests
+
 
 def all_requests_in_order(sheet_id):
     """
@@ -549,5 +564,6 @@ def all_requests_in_order(sheet_id):
     requests.append(add_conditional_formatting_tech_amber_request(sheet_id))
     requests.extend(add_conditional_formatting_atrophy_red(sheet_id))
     requests.extend(add_conditional_formatting_atrophy_amber(sheet_id))
+    requests.extend(add_conditional_formatting_atrophy_individual_criteria_red(sheet_id))
 
     return requests

@@ -88,6 +88,14 @@ green_background = {
     }
 }
 
+light_red_background = {
+    "backgroundColor": {
+        "blue": 0.8,
+        "green": 0.8,
+        "red": 0.957,
+    }
+}
+
 
 def add_conditional_formatting_request(index, cell_range, values, format):
     """
