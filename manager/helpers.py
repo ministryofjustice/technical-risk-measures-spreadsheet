@@ -98,6 +98,24 @@ light_red_background = {
 }
 
 
+light_amber_background = {
+    "backgroundColor": {
+        "blue": 0.804,
+        "green": 0.899,
+        "red": 0.989,
+    }
+}
+
+
+light_green_background = {
+    "backgroundColor": {
+        "blue": 0.828,
+        "green": 0.918,
+        "red": 0.853,
+    }
+}
+
+
 def add_conditional_formatting_request(index, cell_range, values, format):
     """
     Build a request to add a conditional formatting rule using a custom formula.
