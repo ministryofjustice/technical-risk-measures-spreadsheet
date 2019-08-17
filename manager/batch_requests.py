@@ -735,6 +735,14 @@ def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
+    # All date-based atrophy criteria - green if not applicable (entered as "N/A")
+    index = 41
+    cell_range = a1_to_range('V3:AA1000', sheet_id)
+    formula = "=EQ(V3, \"N/A\")"
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
+
     return requests
 
 
