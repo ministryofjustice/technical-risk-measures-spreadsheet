@@ -535,6 +535,57 @@ def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
+    # Dependencies go out of support - red if date in past
+    index = 22
+    cell_range = a1_to_range('W3:W1000', sheet_id)
+
+    column = 'W'
+    formula = date_in_past_condition(column)
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+
+    # General dependency updates last applied - red if date more than a year ago
+    index = 23
+    cell_range = a1_to_range('X3:X1000', sheet_id)
+
+    column = 'X'
+    formula = date_equal_or_earlier_than_condition(column, days_in_future=-365)
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+
+    # Oldest unapplied security patches released - red if date more than 6 months ago
+    index = 24
+    cell_range = a1_to_range('Y3:Y1000', sheet_id)
+
+    column = 'Y'
+    formula = date_equal_or_earlier_than_condition(column, days_in_future=(6 * 30 * -1))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+
+    # Support contract expire - red if date in past
+    index = 25
+    cell_range = a1_to_range('Z3:Z1000', sheet_id)
+
+    column = 'Z'
+    formula = date_in_past_condition(column)
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+
+    # Relevant legislation changes come into effect - red if date less than
+    # 3 months in the future (or already past)
+    index = 26
+    cell_range = a1_to_range('AA3:AA1000', sheet_id)
+
+    column = 'AA'
+    formula = date_equal_or_earlier_than_condition(column, days_in_future=(3 * 30))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+
     return requests
 
 
