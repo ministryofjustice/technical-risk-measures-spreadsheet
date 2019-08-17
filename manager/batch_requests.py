@@ -1,7 +1,8 @@
 from conditional_formatting import date_in_past_condition, \
     date_equal_or_earlier_than_condition
 from helpers import a1_to_range, red_background, amber_background, \
-    green_background, add_conditional_formatting_request, light_red_background
+    green_background, add_conditional_formatting_request, light_red_background, \
+    light_amber_background
 
 
 def test_write_request(sheet_id):
@@ -589,6 +590,80 @@ def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
     return requests
 
 
+def add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id):
+    requests = []
+
+    # Licences expire - amber if date less than 6 months in the future (or already past)
+    index = 27
+    cell_range = a1_to_range('V3:V1000', sheet_id)
+
+    column = 'V'
+    formula = date_equal_or_earlier_than_condition(column, days_in_future=(6 * 30))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
+
+    # Dependencies go out of support - amber if date less than 6 months in the future (or already past)
+    index = 28
+    cell_range = a1_to_range('W3:W1000', sheet_id)
+
+    column = 'W'
+    formula = date_equal_or_earlier_than_condition(column, days_in_future=(6 * 30))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
+
+    # General dependency updates last applied - amber if date more than 6 months ago
+    index = 29
+    cell_range = a1_to_range('X3:X1000', sheet_id)
+
+    column = 'X'
+    formula = date_equal_or_earlier_than_condition(column, days_in_future=(6 * 30 * -1))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
+
+    # Oldest unapplied security patches released - amber if date more than 3 months ago
+    index = 30
+    cell_range = a1_to_range('Y3:Y1000', sheet_id)
+
+    column = 'Y'
+    formula = date_equal_or_earlier_than_condition(column, days_in_future=(3 * 30 * -1))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
+
+    # Support contract expire - amber if date less than 9 months in the future (or already past)
+    index = 31
+    cell_range = a1_to_range('Z3:Z1000', sheet_id)
+
+    column = 'Z'
+    formula = date_equal_or_earlier_than_condition(column, days_in_future=(9 * 30))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
+
+    # Relevant legislation changes come into effect - amber if date less than 6 months in the future (or already past)
+    index = 32
+    cell_range = a1_to_range('AA3:AA1000', sheet_id)
+
+    column = 'AA'
+    formula = date_equal_or_earlier_than_condition(column, days_in_future=(6 * 30))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
+
+    # Actively preventing degradation over time? - amber if false
+    index = 33
+    cell_range = a1_to_range('AB3:AB1000', sheet_id)
+    formula = "=EQ(AB3,FALSE)"
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
+
+    return requests
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -617,5 +692,6 @@ def all_requests_in_order(sheet_id):
     requests.extend(add_conditional_formatting_atrophy_summary_red(sheet_id))
     requests.extend(add_conditional_formatting_atrophy_summary_amber(sheet_id))
     requests.extend(add_conditional_formatting_atrophy_individual_criteria_red(sheet_id))
+    requests.extend(add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id))
 
     return requests
