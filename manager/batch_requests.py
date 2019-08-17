@@ -1,8 +1,8 @@
 from conditional_formatting import date_in_past_condition, \
-    date_equal_or_earlier_than_condition
+    date_equal_or_earlier_than_condition, date_later_than_condition
 from helpers import a1_to_range, red_background, amber_background, \
     green_background, add_conditional_formatting_request, light_red_background, \
-    light_amber_background
+    light_amber_background, light_green_background
 
 
 def test_write_request(sheet_id):
@@ -664,6 +664,80 @@ def add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id):
     return requests
 
 
+def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
+    requests = []
+
+    # Licences expire - green if date more than 6 months in the future
+    index = 34
+    cell_range = a1_to_range('V3:V1000', sheet_id)
+
+    column = 'V'
+    formula = date_later_than_condition(column, days_in_future=(6 * 30))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
+
+    # Dependencies go out of support - green if date more than 6 months in the future
+    index = 35
+    cell_range = a1_to_range('W3:W1000', sheet_id)
+
+    column = 'W'
+    formula = date_later_than_condition(column, days_in_future=(6 * 30))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
+
+    # General dependency updates last applied - green if date less than 6 months ago
+    index = 36
+    cell_range = a1_to_range('X3:X1000', sheet_id)
+
+    column = 'X'
+    formula = date_later_than_condition(column, days_in_future=(6 * 30 * -1))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
+
+    # Oldest unapplied security patches released - green if date less than 3 months ago
+    index = 37
+    cell_range = a1_to_range('Y3:Y1000', sheet_id)
+
+    column = 'Y'
+    formula = date_later_than_condition(column, days_in_future=(3 * 30 * -1))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
+
+    # Support contract expire - green if date more than 9 months in the future
+    index = 38
+    cell_range = a1_to_range('Z3:Z1000', sheet_id)
+
+    column = 'Z'
+    formula = date_later_than_condition(column, days_in_future=(9 * 30))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
+
+    # Relevant legislation changes come into effect - green if date more than 6 months in the future
+    index = 39
+    cell_range = a1_to_range('AA3:AA1000', sheet_id)
+
+    column = 'AA'
+    formula = date_later_than_condition(column, days_in_future=(6 * 30))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
+
+    # Actively preventing degradation over time? - green if true
+    index = 40
+    cell_range = a1_to_range('AB3:AB1000', sheet_id)
+    formula = "=EQ(AB3,TRUE)"
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
+
+    return requests
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -693,5 +767,6 @@ def all_requests_in_order(sheet_id):
     requests.extend(add_conditional_formatting_atrophy_summary_amber(sheet_id))
     requests.extend(add_conditional_formatting_atrophy_individual_criteria_red(sheet_id))
     requests.extend(add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id))
+    requests.extend(add_conditional_formatting_atrophy_individual_criteria_green(sheet_id))
 
     return requests
