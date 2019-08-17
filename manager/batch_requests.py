@@ -330,7 +330,7 @@ def set_default_green_background_tech_atrophy_summaries_request(sheet_id):
     }
 
 
-def add_conditional_formatting_people_red_request(sheet_id):
+def add_conditional_formatting_people_red_summary_request(sheet_id):
     index = 0
     cell_range = a1_to_range('B3:B1000', sheet_id)
     formula = "=AND(EQ(G3,0), EQ(H3,0), EQ(I3,FALSE))"
@@ -339,7 +339,7 @@ def add_conditional_formatting_people_red_request(sheet_id):
     return add_conditional_formatting_request(index, cell_range, values, red_background)
 
 
-def add_conditional_formatting_people_amber_request(sheet_id):
+def add_conditional_formatting_people_amber_summary_request(sheet_id):
     index = 1
     cell_range = a1_to_range('B3:B1000', sheet_id)
     formula = "=OR(AND(EQ(G3,1), EQ(H3,0), EQ(I3,FALSE)), AND(EQ(G3,0), (H3>=1), EQ(I3,FALSE)), AND(EQ(G3,0), EQ(H3,0), EQ(I3,TRUE)), AND(EQ(G3,1), EQ(H3,1), EQ(I3,FALSE)))"
@@ -348,7 +348,7 @@ def add_conditional_formatting_people_amber_request(sheet_id):
     return add_conditional_formatting_request(index, cell_range, values, amber_background)
 
 
-def add_conditional_formatting_people_green_request(sheet_id):
+def add_conditional_formatting_people_green_summary_request(sheet_id):
     index = 2
     cell_range = a1_to_range('B3:B1000', sheet_id)
     formula = "=OR((G3>=2), AND(EQ(G3,1), H3>=2), AND(EQ(G3,1), EQ(I3,TRUE)))"
@@ -357,7 +357,7 @@ def add_conditional_formatting_people_green_request(sheet_id):
     return add_conditional_formatting_request(index, cell_range, values, green_background)
 
 
-def add_conditional_formatting_tech_red(sheet_id):
+def add_conditional_formatting_tech_summary_red(sheet_id):
     requests = []
 
     # Tech binary criteria - ease and risk of making changes
@@ -391,7 +391,7 @@ def add_conditional_formatting_tech_red(sheet_id):
     return requests
 
 
-def add_conditional_formatting_tech_amber_request(sheet_id):
+def add_conditional_formatting_tech_amber_summary_request(sheet_id):
     # Number of medium risks
     index = 7
     cell_range = a1_to_range('C3:C1000', sheet_id)
@@ -401,7 +401,7 @@ def add_conditional_formatting_tech_amber_request(sheet_id):
     return add_conditional_formatting_request(index, cell_range, values, amber_background)
 
 
-def add_conditional_formatting_atrophy_red(sheet_id):
+def add_conditional_formatting_atrophy_summary_red(sheet_id):
     requests = []
 
     # Licences expire - red if date in past
@@ -460,7 +460,7 @@ def add_conditional_formatting_atrophy_red(sheet_id):
     return requests
 
 
-def add_conditional_formatting_atrophy_amber(sheet_id):
+def add_conditional_formatting_atrophy_summary_amber(sheet_id):
     requests = []
 
     # Licences expire - amber if date less than 6 months in the future (or already past)
@@ -521,6 +521,7 @@ def add_conditional_formatting_atrophy_amber(sheet_id):
 
     return requests
 
+
 def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
     requests = []
 
@@ -557,13 +558,13 @@ def all_requests_in_order(sheet_id):
     requests.append(set_data_validation_preventing_degradation_request(sheet_id))
     requests.extend(set_borders(sheet_id))
     requests.append(set_default_green_background_tech_atrophy_summaries_request(sheet_id))
-    requests.append(add_conditional_formatting_people_red_request(sheet_id))
-    requests.append(add_conditional_formatting_people_amber_request(sheet_id))
-    requests.append(add_conditional_formatting_people_green_request(sheet_id))
-    requests.extend(add_conditional_formatting_tech_red(sheet_id))
-    requests.append(add_conditional_formatting_tech_amber_request(sheet_id))
-    requests.extend(add_conditional_formatting_atrophy_red(sheet_id))
-    requests.extend(add_conditional_formatting_atrophy_amber(sheet_id))
+    requests.append(add_conditional_formatting_people_red_summary_request(sheet_id))
+    requests.append(add_conditional_formatting_people_amber_summary_request(sheet_id))
+    requests.append(add_conditional_formatting_people_green_summary_request(sheet_id))
+    requests.extend(add_conditional_formatting_tech_summary_red(sheet_id))
+    requests.append(add_conditional_formatting_tech_amber_summary_request(sheet_id))
+    requests.extend(add_conditional_formatting_atrophy_summary_red(sheet_id))
+    requests.extend(add_conditional_formatting_atrophy_summary_amber(sheet_id))
     requests.extend(add_conditional_formatting_atrophy_individual_criteria_red(sheet_id))
 
     return requests

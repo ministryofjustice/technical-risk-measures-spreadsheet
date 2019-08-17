@@ -88,6 +88,7 @@ green_background = {
     }
 }
 
+
 light_red_background = {
     "backgroundColor": {
         "blue": 0.8,
