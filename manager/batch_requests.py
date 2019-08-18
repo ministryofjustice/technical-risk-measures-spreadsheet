@@ -323,6 +323,30 @@ def set_data_validation_updated_on_date_request(sheet_id):
     return request
 
 
+def format_dates(sheet_id):
+    cell_ranges = [
+        a1_to_range('V3:AA1000', sheet_id),
+        a1_to_range('AD3:AD1000', sheet_id),
+    ]
+    requests = [
+        {
+            "repeatCell": {
+                "range": cell_range,
+                "cell": {
+                    "userEnteredFormat": {
+                        "numberFormat": {
+                            "type": "DATE",
+                        }
+                    },
+                },
+                "fields": "userEnteredFormat(numberFormat)"
+            }
+        } for cell_range in cell_ranges
+    ]
+
+    return requests
+
+
 def set_borders(sheet_id):
     cell_ranges = [
         a1_to_range('B1:B1000', sheet_id),
@@ -979,6 +1003,7 @@ def all_requests_in_order(sheet_id):
     requests.append(set_data_validation_atrophy_dates_request(sheet_id))
     requests.append(set_data_validation_preventing_degradation_request(sheet_id))
     requests.append(set_data_validation_updated_on_date_request(sheet_id))
+    requests.extend(format_dates(sheet_id))
     requests.extend(set_borders(sheet_id))
     requests.append(set_default_green_background_tech_atrophy_summaries_request(sheet_id))
     requests.append(add_conditional_formatting_people_red_summary_request(sheet_id))
