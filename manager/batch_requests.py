@@ -916,6 +916,30 @@ def freeze_header_rows_and_summary_columns_request(sheet_id):
     }
 
 
+def bold_header_rows_and_service_column(sheet_id):
+    cell_ranges = [
+        a1_to_range('A1:AD2', sheet_id),
+        a1_to_range('A3:A1000', sheet_id),
+    ]
+    requests = [
+        {
+            "repeatCell": {
+                "range": cell_range,
+                "cell": {
+                    "userEnteredFormat": {
+                        "textFormat": {
+                            "bold": True,
+                        },
+                    },
+                },
+                "fields": "userEnteredFormat(textFormat)"
+            }
+        } for cell_range in cell_ranges
+    ]
+
+    return requests
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -954,5 +978,6 @@ def all_requests_in_order(sheet_id):
     requests.append(add_conditional_formatting_update_details_amber_request(sheet_id))
     requests.append(add_conditional_formatting_update_details_green_request(sheet_id))
     requests.append(freeze_header_rows_and_summary_columns_request(sheet_id))
+    requests.extend(bold_header_rows_and_service_column(sheet_id))
 
     return requests
