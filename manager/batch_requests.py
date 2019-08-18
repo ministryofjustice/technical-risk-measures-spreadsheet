@@ -560,21 +560,21 @@ def add_conditional_formatting_tech_individual_criteria_red(sheet_id):
     requests = []
 
     # Binary tech criteria - red if false
-    index = 42
+    index = 21
     cell_range = a1_to_range('J3:S1000', sheet_id)
     formula = "=EQ(J3,FALSE)"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # Number of medium risks - red if more than 5
-    index = 43
+    index = 22
     cell_range = a1_to_range('T3:T1000', sheet_id)
     formula = "=T3 > 5"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # Number of high risks - red if one or more
-    index = 44
+    index = 23
     cell_range = a1_to_range('U3:U1000', sheet_id)
     formula = "=U3 >= 1"
     values = [{"userEnteredValue": formula}]
@@ -585,7 +585,7 @@ def add_conditional_formatting_tech_individual_criteria_red(sheet_id):
 
 def add_conditional_formatting_tech_individual_criteria_amber_request(sheet_id):
     # Number of medium risks - amber if between 2 and 5 inclusive
-    index = 45
+    index = 24
     cell_range = a1_to_range('T3:T1000', sheet_id)
     formula = "=AND(T3 >= 2, T3 <= 5)"
     values = [{"userEnteredValue": formula}]
@@ -597,21 +597,21 @@ def add_conditional_formatting_tech_individual_criteria_green(sheet_id):
     requests = []
 
     # Binary tech criteria - green if true
-    index = 46
+    index = 25
     cell_range = a1_to_range('J3:S1000', sheet_id)
     formula = "=EQ(J3,TRUE)"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Number of medium risks - green if less than 2 and not blank
-    index = 47
+    index = 26
     cell_range = a1_to_range('T3:T1000', sheet_id)
     formula = "=AND(NOT(ISBLANK(T3)), (T3 < 2))"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Number of high risks - green if 0 and not blank
-    index = 48
+    index = 27
     cell_range = a1_to_range('U3:U1000', sheet_id)
     formula = "=AND(NOT(ISBLANK(U3)), EQ(U3,0))"
     values = [{"userEnteredValue": formula}]
@@ -624,7 +624,7 @@ def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
     requests = []
 
     # Licences expire - red if date in past
-    index = 21
+    index = 28
     cell_range = a1_to_range('V3:V1000', sheet_id)
 
     column = 'V'
@@ -634,7 +634,7 @@ def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # Dependencies go out of support - red if date in past
-    index = 22
+    index = 29
     cell_range = a1_to_range('W3:W1000', sheet_id)
 
     column = 'W'
@@ -644,7 +644,7 @@ def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # General dependency updates last applied - red if date more than a year ago
-    index = 23
+    index = 30
     cell_range = a1_to_range('X3:X1000', sheet_id)
 
     column = 'X'
@@ -654,7 +654,7 @@ def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # Oldest unapplied security patches released - red if date more than 6 months ago
-    index = 24
+    index = 31
     cell_range = a1_to_range('Y3:Y1000', sheet_id)
 
     column = 'Y'
@@ -664,7 +664,7 @@ def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # Support contract expire - red if date in past
-    index = 25
+    index = 32
     cell_range = a1_to_range('Z3:Z1000', sheet_id)
 
     column = 'Z'
@@ -675,7 +675,7 @@ def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
 
     # Relevant legislation changes come into effect - red if date less than
     # 3 months in the future (or already past)
-    index = 26
+    index = 33
     cell_range = a1_to_range('AA3:AA1000', sheet_id)
 
     column = 'AA'
@@ -691,7 +691,7 @@ def add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id):
     requests = []
 
     # Licences expire - amber if date less than 6 months in the future (or already past)
-    index = 27
+    index = 34
     cell_range = a1_to_range('V3:V1000', sheet_id)
 
     column = 'V'
@@ -701,7 +701,7 @@ def add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
     # Dependencies go out of support - amber if date less than 6 months in the future (or already past)
-    index = 28
+    index = 35
     cell_range = a1_to_range('W3:W1000', sheet_id)
 
     column = 'W'
@@ -711,7 +711,7 @@ def add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
     # General dependency updates last applied - amber if date more than 6 months ago
-    index = 29
+    index = 36
     cell_range = a1_to_range('X3:X1000', sheet_id)
 
     column = 'X'
@@ -721,7 +721,7 @@ def add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
     # Oldest unapplied security patches released - amber if date more than 3 months ago
-    index = 30
+    index = 37
     cell_range = a1_to_range('Y3:Y1000', sheet_id)
 
     column = 'Y'
@@ -731,7 +731,7 @@ def add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
     # Support contract expire - amber if date less than 9 months in the future (or already past)
-    index = 31
+    index = 38
     cell_range = a1_to_range('Z3:Z1000', sheet_id)
 
     column = 'Z'
@@ -741,7 +741,7 @@ def add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
     # Relevant legislation changes come into effect - amber if date less than 6 months in the future (or already past)
-    index = 32
+    index = 39
     cell_range = a1_to_range('AA3:AA1000', sheet_id)
 
     column = 'AA'
@@ -751,7 +751,7 @@ def add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
     # Actively preventing degradation over time? - amber if false
-    index = 33
+    index = 40
     cell_range = a1_to_range('AB3:AB1000', sheet_id)
     formula = "=EQ(AB3,FALSE)"
     values = [{"userEnteredValue": formula}]
@@ -765,7 +765,7 @@ def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
     requests = []
 
     # Licences expire - green if date more than 6 months in the future
-    index = 34
+    index = 41
     cell_range = a1_to_range('V3:V1000', sheet_id)
 
     column = 'V'
@@ -775,7 +775,7 @@ def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Dependencies go out of support - green if date more than 6 months in the future
-    index = 35
+    index = 42
     cell_range = a1_to_range('W3:W1000', sheet_id)
 
     column = 'W'
@@ -785,7 +785,7 @@ def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # General dependency updates last applied - green if date less than 6 months ago
-    index = 36
+    index = 43
     cell_range = a1_to_range('X3:X1000', sheet_id)
 
     column = 'X'
@@ -795,7 +795,7 @@ def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Oldest unapplied security patches released - green if date less than 3 months ago
-    index = 37
+    index = 44
     cell_range = a1_to_range('Y3:Y1000', sheet_id)
 
     column = 'Y'
@@ -805,7 +805,7 @@ def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Support contract expire - green if date more than 9 months in the future
-    index = 38
+    index = 45
     cell_range = a1_to_range('Z3:Z1000', sheet_id)
 
     column = 'Z'
@@ -815,7 +815,7 @@ def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Relevant legislation changes come into effect - green if date more than 6 months in the future
-    index = 39
+    index = 46
     cell_range = a1_to_range('AA3:AA1000', sheet_id)
 
     column = 'AA'
@@ -825,7 +825,7 @@ def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Actively preventing degradation over time? - green if true
-    index = 40
+    index = 47
     cell_range = a1_to_range('AB3:AB1000', sheet_id)
     formula = "=EQ(AB3,TRUE)"
     values = [{"userEnteredValue": formula}]
@@ -833,7 +833,7 @@ def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # All date-based atrophy criteria - green if not applicable (entered as "N/A")
-    index = 41
+    index = 48
     cell_range = a1_to_range('V3:AA1000', sheet_id)
     formula = "=EQ(V3, \"N/A\")"
     values = [{"userEnteredValue": formula}]
