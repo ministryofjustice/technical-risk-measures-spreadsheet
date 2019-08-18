@@ -89,12 +89,43 @@ def delete_all_existing_conditional_formatting_rules(service):
         apply_batch(service, requests)
 
 
+def delete_all_existing_protected_ranges(service):
+    """
+    Get the list of existing protected ranges on the sheet, then delete them all.
+
+    Like conditional formatting rules, the API doesn't have a method to set all
+    protected ranges at once. So adding one each time we run the script will
+    add another duplicate one. Deleting them all each time and then adding the
+    one we need back in works.
+    """
+    data = service.spreadsheets().get(
+        spreadsheetId=SPREADSHEET_ID,
+        includeGridData=False
+    ).execute()
+
+    sheet = [s for s in data['sheets'] if s['properties']['sheetId'] == int(SHEET_ID)][0]
+    protected_ranges = sheet.get('protectedRanges', [])
+
+    if protected_ranges:
+        print(f"Deleting {len(protected_ranges)} existing protected ranges")
+        protected_range_ids = [pr["protectedRangeId"] for pr in protected_ranges]
+        requests = [
+            {
+                "deleteProtectedRange": {
+                    "protectedRangeId": protected_range_id,
+                }
+            } for protected_range_id in protected_range_ids
+        ]
+        apply_batch(service, requests)
+
+
 def main():
     """Apply all the specified changes to a sheet.
     """
     service = build('sheets', 'v4', credentials=get_creds())
 
     delete_all_existing_conditional_formatting_rules(service)
+    delete_all_existing_protected_ranges(service)
 
     requests = batch_requests.all_requests_in_order(SHEET_ID)
     apply_batch(service, requests)
