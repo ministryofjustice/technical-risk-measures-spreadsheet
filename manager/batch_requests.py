@@ -159,7 +159,7 @@ def write_second_header_row_request(sheet_id):
         'Can deploy multiple times a day?',
         'Alerts for an incident are well understood and sent to a known place?',
         'Logs are aggregated and searchable?',
-        'Application has a backup/recovery strategy?',
+        'Application has a backup & recovery strategy?',
         'Code base can be easily changed?',
         'Team has a good understanding of application\'s security?',
         'Number of medium security risks',
