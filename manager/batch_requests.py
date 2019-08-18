@@ -556,6 +556,70 @@ def add_conditional_formatting_atrophy_summary_amber(sheet_id):
     return requests
 
 
+def add_conditional_formatting_tech_individual_criteria_red(sheet_id):
+    requests = []
+
+    # Binary tech criteria - red if false
+    index = 42
+    cell_range = a1_to_range('J3:S1000', sheet_id)
+    formula = "=EQ(J3,FALSE)"
+    values = [{"userEnteredValue": formula}]
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+
+    # Number of medium risks - red if more than 5
+    index = 43
+    cell_range = a1_to_range('T3:T1000', sheet_id)
+    formula = "=T3 > 5"
+    values = [{"userEnteredValue": formula}]
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+
+    # Number of high risks - red if one or more
+    index = 44
+    cell_range = a1_to_range('U3:U1000', sheet_id)
+    formula = "=U3 >= 1"
+    values = [{"userEnteredValue": formula}]
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+
+    return requests
+
+
+def add_conditional_formatting_tech_individual_criteria_amber_request(sheet_id):
+    # Number of medium risks - amber if between 2 and 5 inclusive
+    index = 45
+    cell_range = a1_to_range('T3:T1000', sheet_id)
+    formula = "=AND(T3 >= 2, T3 <= 5)"
+    values = [{"userEnteredValue": formula}]
+
+    return add_conditional_formatting_request(index, cell_range, values, light_amber_background)
+
+
+def add_conditional_formatting_tech_individual_criteria_green(sheet_id):
+    requests = []
+
+    # Binary tech criteria - green if true
+    index = 46
+    cell_range = a1_to_range('J3:S1000', sheet_id)
+    formula = "=EQ(J3,TRUE)"
+    values = [{"userEnteredValue": formula}]
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
+
+    # Number of medium risks - green if less than 2 and not blank
+    index = 47
+    cell_range = a1_to_range('T3:T1000', sheet_id)
+    formula = "=AND(NOT(ISBLANK(T3)), (T3 < 2))"
+    values = [{"userEnteredValue": formula}]
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
+
+    # Number of high risks - green if 0 and not blank
+    index = 48
+    cell_range = a1_to_range('U3:U1000', sheet_id)
+    formula = "=AND(NOT(ISBLANK(U3)), EQ(U3,0))"
+    values = [{"userEnteredValue": formula}]
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
+
+    return requests
+
+
 def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
     requests = []
 
@@ -779,70 +843,6 @@ def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
     return requests
 
 
-def add_conditional_formatting_tech_individual_criteria_red(sheet_id):
-    requests = []
-
-    # Binary tech criteria - red if false
-    index = 42
-    cell_range = a1_to_range('J3:S1000', sheet_id)
-    formula = "=EQ(J3,FALSE)"
-    values = [{"userEnteredValue": formula}]
-    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
-
-    # Number of medium risks - red if more than 5
-    index = 43
-    cell_range = a1_to_range('T3:T1000', sheet_id)
-    formula = "=T3 > 5"
-    values = [{"userEnteredValue": formula}]
-    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
-
-    # Number of high risks - red if one or more
-    index = 44
-    cell_range = a1_to_range('U3:U1000', sheet_id)
-    formula = "=U3 >= 1"
-    values = [{"userEnteredValue": formula}]
-    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
-
-    return requests
-
-
-def add_conditional_formatting_tech_individual_criteria_amber_request(sheet_id):
-    # Number of medium risks - amber if between 2 and 5 inclusive
-    index = 45
-    cell_range = a1_to_range('T3:T1000', sheet_id)
-    formula = "=AND(T3 >= 2, T3 <= 5)"
-    values = [{"userEnteredValue": formula}]
-
-    return add_conditional_formatting_request(index, cell_range, values, light_amber_background)
-
-
-def add_conditional_formatting_tech_individual_criteria_green(sheet_id):
-    requests = []
-
-    # Binary tech criteria - green if true
-    index = 46
-    cell_range = a1_to_range('J3:S1000', sheet_id)
-    formula = "=EQ(J3,TRUE)"
-    values = [{"userEnteredValue": formula}]
-    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
-
-    # Number of medium risks - green if less than 2 and not blank
-    index = 47
-    cell_range = a1_to_range('T3:T1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(T3)), (T3 < 2))"
-    values = [{"userEnteredValue": formula}]
-    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
-
-    # Number of high risks - green if 0 and not blank
-    index = 48
-    cell_range = a1_to_range('U3:U1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(U3)), EQ(U3,0))"
-    values = [{"userEnteredValue": formula}]
-    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
-
-    return requests
-
-
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -871,11 +871,11 @@ def all_requests_in_order(sheet_id):
     requests.append(add_conditional_formatting_tech_amber_summary_request(sheet_id))
     requests.extend(add_conditional_formatting_atrophy_summary_red(sheet_id))
     requests.extend(add_conditional_formatting_atrophy_summary_amber(sheet_id))
-    requests.extend(add_conditional_formatting_atrophy_individual_criteria_red(sheet_id))
-    requests.extend(add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id))
-    requests.extend(add_conditional_formatting_atrophy_individual_criteria_green(sheet_id))
     requests.extend(add_conditional_formatting_tech_individual_criteria_red(sheet_id))
     requests.append(add_conditional_formatting_tech_individual_criteria_amber_request(sheet_id))
     requests.extend(add_conditional_formatting_tech_individual_criteria_green(sheet_id))
+    requests.extend(add_conditional_formatting_atrophy_individual_criteria_red(sheet_id))
+    requests.extend(add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id))
+    requests.extend(add_conditional_formatting_atrophy_individual_criteria_green(sheet_id))
 
     return requests
