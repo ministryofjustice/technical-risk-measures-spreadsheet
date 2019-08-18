@@ -28,7 +28,7 @@ $ pipenv run pytest
 ## Setting up a technical risk measures spreadsheet
 
 - Create a new spreadsheet in Google Sheets
-- Add 2 columns to it (so the columns go up to AB)
+- Add 4 columns to it (so the columns go up to AD)
 - Copy the `.env.example` file to a new file called `.env`
 - Copy the spreadsheet's id (from its URL) into `.env` as `SPREADSHEET_ID`
 - From the [Google APIs Console](https://console.developers.google.com/apis/dashboard),

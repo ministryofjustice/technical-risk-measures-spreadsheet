@@ -36,6 +36,7 @@ def merge_header_row_cells(sheet_id):
         a1_to_range('G1:I1', sheet_id),
         a1_to_range('J1:U1', sheet_id),
         a1_to_range('V1:AB1', sheet_id),
+        a1_to_range('AC1:AD1', sheet_id),
     ]
 
     requests = [
@@ -101,7 +102,18 @@ def write_first_header_rows(sheet_id):
                     ]}
                 ]
             }
-        }
+        },
+        {
+            'updateCells': {
+                'fields': '*',
+                'range': a1_to_range('AC1', sheet_id),
+                'rows': [
+                    {'values': [
+                        {'userEnteredValue': {'stringValue': 'Update details'}}
+                    ]}
+                ]
+            }
+        },
     ]
 
     return requests
@@ -111,7 +123,7 @@ def write_second_header_row_request(sheet_id):
     """
     Write the second header row values.
     """
-    cell_range = a1_to_range('A2:AB2', sheet_id)
+    cell_range = a1_to_range('A2:AD2', sheet_id)
     values = [
         'Service',
         'People summary',
@@ -140,7 +152,9 @@ def write_second_header_row_request(sheet_id):
         'When were the oldest unapplied security patches released?',
         'When does the support contract expire?',
         'When do the next relevant legislation changes come into effect?',
-        'Are we actively preventing degradation over time?'
+        'Are we actively preventing degradation over time?',
+        'Updated by',
+        'Updated on',
     ]
     rows = [
         {'values': [
@@ -273,6 +287,24 @@ def set_data_validation_preventing_degradation_request(sheet_id):
     return request
 
 
+def set_data_validation_updated_on_date_request(sheet_id):
+    cell_range = a1_to_range('AD3:AD1000', sheet_id)
+    request = {
+        "setDataValidation": {
+            "range": cell_range,
+            "rule": {
+                "showCustomUi": False,
+                "strict": False,
+                "condition": {
+                    "type": "DATE_IS_VALID",
+                },
+            },
+        }
+    }
+
+    return request
+
+
 def set_borders(sheet_id):
     cell_ranges = [
         a1_to_range('B1:B1000', sheet_id),
@@ -280,6 +312,7 @@ def set_borders(sheet_id):
         a1_to_range('G1:G1000', sheet_id),
         a1_to_range('J1:J1000', sheet_id),
         a1_to_range('V1:V1000', sheet_id),
+        a1_to_range('AC1:AC1000', sheet_id),
     ]
     requests = [
         {
@@ -828,6 +861,7 @@ def all_requests_in_order(sheet_id):
     requests.append(set_data_validation_number_of_security_risks_request(sheet_id))
     requests.append(set_data_validation_atrophy_dates_request(sheet_id))
     requests.append(set_data_validation_preventing_degradation_request(sheet_id))
+    requests.append(set_data_validation_updated_on_date_request(sheet_id))
     requests.extend(set_borders(sheet_id))
     requests.append(set_default_green_background_tech_atrophy_summaries_request(sheet_id))
     requests.append(add_conditional_formatting_people_red_summary_request(sheet_id))
