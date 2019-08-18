@@ -5,31 +5,6 @@ from helpers import a1_to_range, red_background, amber_background, \
     light_amber_background, light_green_background
 
 
-def test_write_request(sheet_id):
-    """
-    Test writing to a sheet, mainly to check we have permission to write.
-    """
-    cell_range = a1_to_range('C3:D4', sheet_id)
-    rows = [
-        {'values': [
-            {'userEnteredValue': {'stringValue': 'Can'}},
-            {'userEnteredValue': {'stringValue': 'I'}}
-        ]},
-        {'values': [
-            {'userEnteredValue': {'stringValue': 'write'}},
-            {'userEnteredValue': {'stringValue': 'here?'}}
-        ]}
-    ]
-
-    return {
-        'updateCells': {
-            'fields': '*',
-            'range': cell_range,
-            'rows': rows
-        }
-    }
-
-
 def remove_all_user_entered_formatting_request(sheet_id):
     """
     Do this at the start, to clear any formatting that's been copied+pasted.

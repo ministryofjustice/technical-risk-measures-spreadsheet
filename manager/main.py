@@ -42,20 +42,6 @@ def get_creds():
     return creds
 
 
-def try_reading(service):
-    # Call the Sheets API
-    sheet = service.spreadsheets()
-    result = sheet.values().get(spreadsheetId=SPREADSHEET_ID,
-                                range='Sheet1!A1:A2').execute()
-    values = result.get('values', [])
-
-    if not values:
-        print('No data found.')
-    else:
-        for row in values:
-            print(row)
-
-
 def apply_batch(service, requests):
     """
     Apply multiple updates in a single batch.
@@ -71,11 +57,6 @@ def apply_batch(service, requests):
     service.spreadsheets().batchUpdate(
         spreadsheetId=SPREADSHEET_ID,
         body=body).execute()
-
-
-def try_writing(service):
-    requests = [batch_requests.test_write_request(SHEET_ID)]
-    apply_batch(service, requests)
 
 
 def delete_all_existing_conditional_formatting_rules(service):
