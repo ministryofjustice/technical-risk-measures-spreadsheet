@@ -59,7 +59,7 @@ def apply_batch(service, requests):
         body=body).execute()
 
 
-def delete_all_existing_conditional_formatting_rules(service, sheet_id):
+def delete_all_existing_conditional_formatting_rules(service, sheet):
     """
     Find out how many existing rules are on the sheet, then delete them all.
 
@@ -68,13 +68,8 @@ def delete_all_existing_conditional_formatting_rules(service, sheet_id):
     the API only supports adding and updating operations on individual rules.
     So delete them all each time before setting the current rules.
     """
-    data = service.spreadsheets().get(
-        spreadsheetId=SPREADSHEET_ID,
-        includeGridData=False
-    ).execute()
-
-    sheet = [s for s in data['sheets'] if s['properties']['sheetId'] == int(sheet_id)][0]
     number_of_rules_to_delete = len(sheet.get('conditionalFormats', []))
+    sheet_id = get_sheet_id(sheet)
 
     if number_of_rules_to_delete > 0:
         print(f"Deleting {number_of_rules_to_delete} existing conditional formatting rules")
@@ -89,7 +84,7 @@ def delete_all_existing_conditional_formatting_rules(service, sheet_id):
         apply_batch(service, requests)
 
 
-def delete_all_existing_protected_ranges(service, sheet_id):
+def delete_all_existing_protected_ranges(service, sheet):
     """
     Get the list of existing protected ranges on the sheet, then delete them all.
 
@@ -103,7 +98,6 @@ def delete_all_existing_protected_ranges(service, sheet_id):
         includeGridData=False
     ).execute()
 
-    sheet = [s for s in data['sheets'] if s['properties']['sheetId'] == int(sheet_id)][0]
     protected_ranges = sheet.get('protectedRanges', [])
 
     if protected_ranges:
@@ -135,8 +129,7 @@ def get_sheet(service, sheet_title):
         raise Exception('No sheet found with that title')
 
 
-def find_sheet_id(service, sheet_title):
-    sheet = get_sheet(service, sheet_title)
+def get_sheet_id(sheet):
     return sheet['properties']['sheetId']
 
 
@@ -145,10 +138,11 @@ def main():
     """
     service = build('sheets', 'v4', credentials=get_creds())
 
-    sheet_id = find_sheet_id(service, SHEET_TITLE)
+    sheet = get_sheet(service, SHEET_TITLE)
+    sheet_id = get_sheet_id(sheet)
 
-    delete_all_existing_conditional_formatting_rules(service, sheet_id)
-    delete_all_existing_protected_ranges(service, sheet_id)
+    delete_all_existing_conditional_formatting_rules(service, sheet)
+    delete_all_existing_protected_ranges(service, sheet)
 
     requests = batch_requests.all_requests_in_order(sheet_id)
     apply_batch(service, requests)
