@@ -1,8 +1,14 @@
+import os
+
 from conditional_formatting import date_in_past_condition, \
     date_equal_or_earlier_than_condition, date_later_than_condition
 from helpers import a1_to_range, red_background, amber_background, \
     green_background, add_conditional_formatting_request, light_red_background, \
     light_amber_background, light_green_background
+
+
+PROTECTED_RANGE_EDITOR_USERS = os.environ['PROTECTED_RANGE_EDITOR_USERS']
+PROTECTED_RANGE_EDITOR_GROUPS = os.environ['PROTECTED_RANGE_EDITOR_GROUPS']
 
 
 def remove_all_user_entered_formatting_request(sheet_id):
@@ -19,6 +25,29 @@ def remove_all_user_entered_formatting_request(sheet_id):
                 "userEnteredFormat": {},
             },
             "fields": "userEnteredFormat"
+        }
+    }
+
+
+def protect_header_rows_request(sheet_id, users_list, groups_list):
+    def split_email_address_lists(l):
+        return [a.strip() for a in l.split(',')]
+
+    users = split_email_address_lists(users_list)
+    groups = split_email_address_lists(groups_list)
+
+    return {
+        "addProtectedRange": {
+            "protectedRange": {
+                "range": a1_to_range('A1:AD2', sheet_id),
+                "description": "Header rows",
+                "warningOnly": False,
+                "editors": {
+                    "users": users,
+                    "groups": groups,
+                    "domainUsersCanEdit": False,
+                }
+            }
         }
     }
 
@@ -1005,6 +1034,7 @@ def all_requests_in_order(sheet_id):
     requests = []
 
     requests.append(remove_all_user_entered_formatting_request(sheet_id))
+    requests.append(protect_header_rows_request(sheet_id, PROTECTED_RANGE_EDITOR_USERS, PROTECTED_RANGE_EDITOR_GROUPS))
     requests.extend(merge_header_row_cells(sheet_id))
     requests.extend(write_first_header_rows(sheet_id))
     requests.append(write_second_header_row_request(sheet_id))
