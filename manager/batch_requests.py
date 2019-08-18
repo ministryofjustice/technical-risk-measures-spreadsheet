@@ -916,7 +916,7 @@ def freeze_header_rows_and_summary_columns_request(sheet_id):
     }
 
 
-def bold_header_rows_and_service_column(sheet_id):
+def bold_and_wrap_text_in_header_rows_and_service_column(sheet_id):
     cell_ranges = [
         a1_to_range('A1:AD2', sheet_id),
         a1_to_range('A3:A1000', sheet_id),
@@ -930,9 +930,10 @@ def bold_header_rows_and_service_column(sheet_id):
                         "textFormat": {
                             "bold": True,
                         },
+                        "wrapStrategy": "WRAP",
                     },
                 },
-                "fields": "userEnteredFormat(textFormat)"
+                "fields": "userEnteredFormat(textFormat, wrapStrategy)"
             }
         } for cell_range in cell_ranges
     ]
@@ -978,6 +979,6 @@ def all_requests_in_order(sheet_id):
     requests.append(add_conditional_formatting_update_details_amber_request(sheet_id))
     requests.append(add_conditional_formatting_update_details_green_request(sheet_id))
     requests.append(freeze_header_rows_and_summary_columns_request(sheet_id))
-    requests.extend(bold_header_rows_and_service_column(sheet_id))
+    requests.extend(bold_and_wrap_text_in_header_rows_and_service_column(sheet_id))
 
     return requests
