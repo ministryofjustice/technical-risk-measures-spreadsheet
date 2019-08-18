@@ -30,6 +30,24 @@ def test_write_request(sheet_id):
     }
 
 
+def remove_all_user_entered_formatting_request(sheet_id):
+    """
+    Do this at the start, to clear any formatting that's been copied+pasted.
+
+    This is a single request that can be done as part of the main batch, unlike
+    deleting the conditional formatting rules.
+    """
+    return {
+        "repeatCell": {
+            "range": a1_to_range('A1:AD1000', sheet_id),
+            "cell": {
+                "userEnteredFormat": {},
+            },
+            "fields": "userEnteredFormat"
+        }
+    }
+
+
 def merge_header_row_cells(sheet_id):
     cell_ranges = [
         a1_to_range('B1:D1', sheet_id),
@@ -950,6 +968,7 @@ def all_requests_in_order(sheet_id):
     """
     requests = []
 
+    requests.append(remove_all_user_entered_formatting_request(sheet_id))
     requests.extend(merge_header_row_cells(sheet_id))
     requests.extend(write_first_header_rows(sheet_id))
     requests.append(write_second_header_row_request(sheet_id))
