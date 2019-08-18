@@ -901,6 +901,21 @@ def add_conditional_formatting_update_details_green_request(sheet_id):
     return add_conditional_formatting_request(index, cell_range, values, light_green_background)
 
 
+def freeze_header_rows_and_summary_columns_request(sheet_id):
+    return {
+        "updateSheetProperties": {
+            "properties": {
+                "sheetId": sheet_id,
+                "gridProperties": {
+                    "frozenRowCount": "2",
+                    "frozenColumnCount": "4",
+                },
+            },
+            "fields": "gridProperties.frozenRowCount, gridProperties.frozenColumnCount"
+        }
+    }
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -938,5 +953,6 @@ def all_requests_in_order(sheet_id):
     requests.extend(add_conditional_formatting_update_details_red(sheet_id))
     requests.append(add_conditional_formatting_update_details_amber_request(sheet_id))
     requests.append(add_conditional_formatting_update_details_green_request(sheet_id))
+    requests.append(freeze_header_rows_and_summary_columns_request(sheet_id))
 
     return requests
