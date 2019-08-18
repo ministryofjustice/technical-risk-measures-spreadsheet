@@ -843,6 +843,64 @@ def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
     return requests
 
 
+def add_conditional_formatting_update_details_red(sheet_id):
+    requests = []
+
+    # Both update details columns - red if blank
+    index = 49
+    cell_range = a1_to_range('AC3:AD1000', sheet_id)
+    formula = "=ISBLANK(AC3)"
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+
+    # Updated on - red if in the future
+    index = 50
+    cell_range = a1_to_range('AD3:AD1000', sheet_id)
+
+    column = 'AD'
+    formula = date_later_than_condition(column, days_in_future=(0))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+
+    # Updated on - red if more than 3 months ago
+    index = 51
+    cell_range = a1_to_range('AD3:AD1000', sheet_id)
+
+    column = 'AD'
+    formula = date_equal_or_earlier_than_condition(column, days_in_future=(3 * 30 * -1))
+    values = [{"userEnteredValue": formula}]
+
+    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+
+    return requests
+
+
+def add_conditional_formatting_update_details_amber_request(sheet_id):
+    # Updated on - amber if more than 2 months ago
+    index = 52
+    cell_range = a1_to_range('AD3:AD1000', sheet_id)
+
+    column = 'AD'
+    formula = date_equal_or_earlier_than_condition(column, days_in_future=(2 * 30 * -1))
+    values = [{"userEnteredValue": formula}]
+
+    return add_conditional_formatting_request(index, cell_range, values, light_amber_background)
+
+
+def add_conditional_formatting_update_details_green_request(sheet_id):
+    # Updated on - green if less than 2 months ago
+    index = 53
+    cell_range = a1_to_range('AD3:AD1000', sheet_id)
+
+    column = 'AD'
+    formula = date_later_than_condition(column, days_in_future=(2 * 30 * -1))
+    values = [{"userEnteredValue": formula}]
+
+    return add_conditional_formatting_request(index, cell_range, values, light_green_background)
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -877,5 +935,8 @@ def all_requests_in_order(sheet_id):
     requests.extend(add_conditional_formatting_atrophy_individual_criteria_red(sheet_id))
     requests.extend(add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id))
     requests.extend(add_conditional_formatting_atrophy_individual_criteria_green(sheet_id))
+    requests.extend(add_conditional_formatting_update_details_red(sheet_id))
+    requests.append(add_conditional_formatting_update_details_amber_request(sheet_id))
+    requests.append(add_conditional_formatting_update_details_green_request(sheet_id))
 
     return requests
