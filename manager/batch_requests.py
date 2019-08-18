@@ -983,6 +983,43 @@ def bold_and_wrap_text_in_header_rows_and_service_column(sheet_id):
     return requests
 
 
+def set_column_widths(sheet_id):
+    # Default column width is 100 pixels
+    a1_with_widths = [
+        ('A1:A1000', 230),
+        ('E1:E1000', 160),
+        ('F1:F1000', 200),
+        ('G1:G1000', 95),
+        ('H1:H1000', 85),
+        ('I1:I1000', 65),
+        ('AC1:AC1000', 120),
+    ]
+
+    # This API call wants the range in a different format
+    def format_a1_ranges_with_column_dimension(a1, sheet_id):
+        full_range = a1_to_range(a1, sheet_id)
+        return {
+            "sheetId": sheet_id,
+            "dimension": "COLUMNS",
+            "startIndex": full_range["startColumnIndex"],
+            "endIndex": full_range["endColumnIndex"]
+        }
+
+    requests = [
+        {
+            "updateDimensionProperties": {
+                "range": format_a1_ranges_with_column_dimension(a1, sheet_id),
+                "properties": {
+                    "pixelSize": width
+                },
+                "fields": "pixelSize"
+            }
+        } for a1, width in a1_with_widths
+    ]
+
+    return requests
+
+
 def all_requests_in_order(sheet_id):
     """
     Return all the real requests, in the right order for applying as a batch.
@@ -1024,5 +1061,6 @@ def all_requests_in_order(sheet_id):
     requests.append(add_conditional_formatting_update_details_green_request(sheet_id))
     requests.append(freeze_header_rows_and_summary_columns_request(sheet_id))
     requests.extend(bold_and_wrap_text_in_header_rows_and_service_column(sheet_id))
+    requests.extend(set_column_widths(sheet_id))
 
     return requests
