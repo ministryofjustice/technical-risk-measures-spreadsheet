@@ -343,7 +343,7 @@ def add_conditional_formatting_people_red_summary_request(sheet_id):
 def add_conditional_formatting_people_amber_summary_request(sheet_id):
     index = 1
     cell_range = a1_to_range('B3:B1000', sheet_id)
-    formula = "=OR(AND(EQ(G3,1), EQ(H3,0), EQ(I3,FALSE)), AND(EQ(G3,0), (H3>=1), EQ(I3,FALSE)), AND(EQ(G3,0), EQ(H3,0), EQ(I3,TRUE)), AND(EQ(G3,1), EQ(H3,1), EQ(I3,FALSE)))"
+    formula = "=OR(AND(EQ(G3,1), EQ(H3,0), EQ(I3,FALSE)), AND(EQ(G3,0), (H3>=1), EQ(I3,FALSE)), AND(EQ(G3,0), EQ(H3,0), EQ(I3,TRUE)), AND(EQ(G3,0), (H3>=1), EQ(I3,TRUE)), AND(EQ(G3,1), EQ(H3,1), EQ(I3,FALSE)))"
     values = [{"userEnteredValue": formula}]
 
     return add_conditional_formatting_request(index, cell_range, values, amber_background)
