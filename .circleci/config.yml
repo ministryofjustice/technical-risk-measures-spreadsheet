@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/python:3.7.4
+        environment:
+          PIPENV_VENV_IN_PROJECT: true # creates .venv in project directory
+    steps:
+      - checkout
+      - run:
+          command: |
+            pip --version
+      - run:
+          name: Install dependencies
+          command: pipenv sync --dev
+      - run:
+          command: |
+            pipenv run pytest
