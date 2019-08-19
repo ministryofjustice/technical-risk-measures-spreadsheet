@@ -23,3 +23,6 @@ jobs:
       - run:
           command: |
             pipenv run pytest
+      - run:
+          command: |
+            pipenv run python manager/main.py
