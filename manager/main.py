@@ -1,6 +1,8 @@
+import json
 import pickle
 import os
 import os.path
+from base64 import b64decode
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from google.oauth2 import service_account
@@ -11,13 +13,41 @@ import batch_requests
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
-SERVICE_ACCOUNT_FILE = os.environ['SERVICE_ACCOUNT_FILE']
+# Only one of these two is required, so use get with default fallback value:
+SERVICE_ACCOUNT_FILE = os.environ.get('SERVICE_ACCOUNT_FILE', '')
+SERVICE_ACCOUNT_INFO = os.environ.get('SERVICE_ACCOUNT_INFO', '')
 
 SPREADSHEET_ID = os.environ['SPREADSHEET_ID']
 SHEET_TITLE = os.environ['SHEET_TITLE']
 
 
+def get_service_account_info():
+    """
+    Load service account info either from a file or base64-encoded envvar.
+
+    A file is a bit clearer to work with locally, but for running anywhere else
+    (eg CircleCI) it's easier to keep these creds in a base64-encoded
+    environment variable rather than try to provide them as a file securely.
+    """
+    if SERVICE_ACCOUNT_FILE:
+        info = service_account.Credentials.from_service_account_file(
+                    SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    elif SERVICE_ACCOUNT_INFO:
+        json_info = json.load(b64decode(SERVICE_ACCOUNT_INFO))
+        info = service_account.Credentials.from_service_account_info(
+                    json_info, scopes=SCOPES)
+    else:
+        raise Exception('No service account info provided')
+
+    return info
+
+
 def get_creds():
+    """
+    Get valid credentials from local cache or service account info.
+
+    And cache valid credentials for subsequent runs.
+    """
     creds = None
 
     # The file token.pickle stores the user's access and refresh tokens, and is
@@ -33,8 +63,7 @@ def get_creds():
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            creds = service_account.Credentials.from_service_account_file(
-                        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+            creds = get_service_account_info()
         # Save the credentials for the next run
         with open(token_filename, 'wb') as token:
             pickle.dump(creds, token)
