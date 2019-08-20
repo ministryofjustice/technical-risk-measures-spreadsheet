@@ -44,6 +44,14 @@ jobs:
             - ~/.local
             - ~/.cache
       - run:
+          name: Set up envvars for development spreadsheet
+          command: |
+            echo "export SPREADSHEET_ID=$DEVELOPMENT_SPREADSHEET_ID" >> $BASH_ENV
+            echo "export SHEET_TITLE=$DEVELOPMENT_SHEET_TITLE" >> $BASH_ENV
+            echo "export PROTECTED_RANGE_EDITOR_GROUPS=$DEVELOPMENT_PROTECTED_RANGE_EDITOR_GROUPS" >> $BASH_ENV
+            echo "export PROTECTED_RANGE_EDITOR_USERS=$DEVELOPMENT_PROTECTED_RANGE_EDITOR_USERS" >> $BASH_ENV
+      - run:
+          name: Deploy to development spreadsheet
           command: |
             pipenv run python manager/main.py
 
