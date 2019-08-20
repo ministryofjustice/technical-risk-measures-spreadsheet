@@ -13,7 +13,7 @@ jobs:
             - cache-{{ checksum "Pipfile.lock" }}
             - cache-
       - run:
-          name: Install dependencies
+          name: Install test dependencies
           command: pipenv sync --dev
       - save_cache:
           key: cache-{{ checksum "Pipfile.lock" }}
@@ -23,7 +23,8 @@ jobs:
       - run:
           command: |
             pipenv run pytest
-  deploy:
+
+  deploy_to_development_spreadsheet:
     working_directory: ~/repo
     docker:
       - image: circleci/python:3.7.4
@@ -55,21 +56,56 @@ jobs:
           command: |
             pipenv run python manager/main.py
 
+  deploy_to_real_spreadsheet:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/python:3.7.4
+        environment:
+          PIPENV_VENV_IN_PROJECT: true # creates .venv in project directory
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - cache-{{ checksum "Pipfile.lock" }}
+            - cache-
+      - run:
+          name: Install dependencies
+          command: pipenv sync
+      - save_cache:
+          key: cache-{{ checksum "Pipfile.lock" }}
+          paths:
+            - ~/.local
+            - ~/.cache
+      - run:
+          name: Set up envvars for real spreadsheet
+          command: |
+            echo "export SPREADSHEET_ID=$REAL_SPREADSHEET_ID" >> $BASH_ENV
+            echo "export SHEET_TITLE=$REAL_SHEET_TITLE" >> $BASH_ENV
+            echo "export PROTECTED_RANGE_EDITOR_GROUPS=$REAL_PROTECTED_RANGE_EDITOR_GROUPS" >> $BASH_ENV
+            echo "export PROTECTED_RANGE_EDITOR_USERS=$REAL_PROTECTED_RANGE_EDITOR_USERS" >> $BASH_ENV
+      - run:
+          name: Deploy to real spreadsheet
+          command: |
+            pipenv run python manager/main.py
+
 workflows:
   version: 2
   test_and_deploy:
     jobs:
       - test
-      - deploy_approval:
-          type: approval
+      - deploy_to_development_spreadsheet:
           requires:
             - test
+      - deploy_to_real_spreadsheet_approval:
+          type: approval
+          requires:
+            - deploy_to_development_spreadsheet
           filters:
             branches:
               only: master
-      - deploy:
+      - deploy_to_real_spreadsheet:
           requires:
-            - deploy_approval
+            - deploy_to_real_spreadsheet_approval
           filters:
             branches:
               only: master
