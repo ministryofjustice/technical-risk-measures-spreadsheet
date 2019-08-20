@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  test:
     working_directory: ~/repo
     docker:
       - image: circleci/python:3.7.4
@@ -23,6 +23,45 @@ jobs:
       - run:
           command: |
             pipenv run pytest
+  deploy:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/python:3.7.4
+        environment:
+          PIPENV_VENV_IN_PROJECT: true # creates .venv in project directory
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - cache-{{ checksum "Pipfile.lock" }}
+            - cache-
+      - run:
+          name: Install dependencies
+          command: pipenv sync
+      - save_cache:
+          key: cache-{{ checksum "Pipfile.lock" }}
+          paths:
+            - ~/.local
+            - ~/.cache
       - run:
           command: |
             pipenv run python manager/main.py
+
+workflows:
+  version: 2
+  test_and_deploy:
+    jobs:
+      - test
+      - deploy_approval:
+          type: approval
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+      - deploy:
+          requires:
+            - deploy_approval
+          filters:
+            branches:
+              only: master
