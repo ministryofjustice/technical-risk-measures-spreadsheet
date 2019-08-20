@@ -8,9 +8,6 @@ jobs:
           PIPENV_VENV_IN_PROJECT: true # creates .venv in project directory
     steps:
       - checkout
-      - run:
-          command: |
-            pip --version
       - restore_cache:
           keys:
             - cache-{{ checksum "Pipfile.lock" }}
