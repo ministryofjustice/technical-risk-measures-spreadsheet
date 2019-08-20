@@ -33,7 +33,7 @@ def get_service_account_info():
         info = service_account.Credentials.from_service_account_file(
                     SERVICE_ACCOUNT_FILE, scopes=SCOPES)
     elif SERVICE_ACCOUNT_INFO:
-        json_info = json.load(b64decode(SERVICE_ACCOUNT_INFO))
+        json_info = json.loads(b64decode(SERVICE_ACCOUNT_INFO))
         info = service_account.Credentials.from_service_account_info(
                     json_info, scopes=SCOPES)
     else:
