@@ -2,7 +2,7 @@ import pytest
 
 from manager.conditional_formatting import date_in_past_condition, \
     date_equal_or_earlier_than_condition
-from manager.helpers import column_letters_to_number, split_cell_string, a1_to_range
+from manager.helpers import column_letters_to_number, split_cell_string, a1_to_range, build_cell_range
 
 
 def test_column_letters_to_number_A():
@@ -93,6 +93,34 @@ def test_a1_to_range_A2AC2():
         "endRowIndex": 2
     }
     assert a1_to_range('A2:AC2', 123) == expected_range
+
+
+def test_build_cell_range_with_last_values():
+    expected_range = {
+        "sheetId": 5,
+        "startColumnIndex": 2,
+        "startRowIndex": 1,
+        "endColumnIndex": 5,
+        "endRowIndex": 11
+    }
+    assert build_cell_range('C', 2, 'E', 11, sheet_id=5) == expected_range
+
+
+def test_build_cell_range_without_last_values_for_single_cell():
+    expected_range = {
+        "sheetId": 5,
+        "startColumnIndex": 2,
+        "startRowIndex": 1,
+        "endColumnIndex": 3,
+        "endRowIndex": 2
+    }
+    assert build_cell_range('C', 2, sheet_id=5) == expected_range
+
+
+def test_build_cell_range_missing_sheet_id():
+    with pytest.raises(TypeError) as excinfo:
+        build_cell_range('C', 2, 'D', 6)
+    assert 'sheet_id is required' in str(excinfo.value)
 
 
 def test_date_in_past_condition():
