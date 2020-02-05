@@ -170,6 +170,16 @@ def main():
     sheet = get_sheet(service, SHEET_TITLE)
     sheet_id = get_sheet_id(sheet)
 
+    expected_column_count = 30
+    actual_column_count = sheet['properties']['gridProperties']['columnCount']
+    if actual_column_count != expected_column_count:
+        raise(Exception("\n".join([
+                f"Expected {expected_column_count} columns in the sheet, but there are actually {actual_column_count}.",
+                "This script doesn't handle adding and removing columns or moving data values around,",
+                "so you need to manually edit the columns to match the expected number and put any data",
+                "you want to keep into the right columns, before running this again."
+        ])))
+
     delete_all_existing_conditional_formatting_rules(service, sheet)
     delete_all_existing_protected_ranges(service, sheet)
 
