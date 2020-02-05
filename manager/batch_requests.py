@@ -120,7 +120,7 @@ def write_first_header_rows(sheet_id):
                 'range': a1_to_range('V1', sheet_id),
                 'rows': [
                     {'values': [
-                        {'userEnteredValue': {'stringValue': 'Atrophy criteria'}}
+                        {'userEnteredValue': {'stringValue': 'Decay criteria'}}
                     ]}
                 ]
             }
@@ -150,7 +150,7 @@ def write_second_header_row_request(sheet_id):
         'Service',
         'People summary',
         'Tech summary',
-        'Atrophy summary',
+        'Decay summary',
         'Service area',
         'Notes',
         'Number of civil servants',
@@ -273,7 +273,7 @@ def set_data_validation_number_of_security_risks_request(sheet_id):
     return request
 
 
-def set_data_validation_atrophy_dates_request(sheet_id):
+def set_data_validation_decay_dates_request(sheet_id):
     cell_range = a1_to_range('V3:AA1000', sheet_id)
     request = {
         "setDataValidation": {
@@ -379,9 +379,9 @@ def set_borders(sheet_id):
     return requests
 
 
-def set_default_green_background_tech_atrophy_summaries_request(sheet_id):
+def set_default_green_background_tech_decay_summaries_request(sheet_id):
     """
-    The tech and atrophy summary columns have a green background by default.
+    The tech and decay summary columns have a green background by default.
 
     Conditional formatting rules override this for red and amber.
 
@@ -481,7 +481,7 @@ def add_conditional_formatting_tech_amber_summary_request(sheet_id):
     return add_conditional_formatting_request(index, cell_range, values, amber_background)
 
 
-def add_conditional_formatting_atrophy_summary_red(sheet_id):
+def add_conditional_formatting_decay_summary_red(sheet_id):
     requests = []
 
     # Licences expire - red if date in past
@@ -540,7 +540,7 @@ def add_conditional_formatting_atrophy_summary_red(sheet_id):
     return requests
 
 
-def add_conditional_formatting_atrophy_summary_amber(sheet_id):
+def add_conditional_formatting_decay_summary_amber(sheet_id):
     requests = []
 
     # Licences expire - amber if date less than 6 months in the future (or already past)
@@ -666,7 +666,7 @@ def add_conditional_formatting_tech_individual_criteria_green(sheet_id):
     return requests
 
 
-def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
+def add_conditional_formatting_decay_individual_criteria_red(sheet_id):
     requests = []
 
     # Licences expire - red if date in past
@@ -733,7 +733,7 @@ def add_conditional_formatting_atrophy_individual_criteria_red(sheet_id):
     return requests
 
 
-def add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id):
+def add_conditional_formatting_decay_individual_criteria_amber(sheet_id):
     requests = []
 
     # Licences expire - amber if date less than 6 months in the future (or already past)
@@ -807,7 +807,7 @@ def add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id):
     return requests
 
 
-def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
+def add_conditional_formatting_decay_individual_criteria_green(sheet_id):
     requests = []
 
     # Licences expire - green if date more than 6 months in the future
@@ -878,7 +878,7 @@ def add_conditional_formatting_atrophy_individual_criteria_green(sheet_id):
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
-    # All date-based atrophy criteria - green if not applicable (entered as "N/A")
+    # All date-based decay criteria - green if not applicable (entered as "N/A")
     index = 48
     cell_range = a1_to_range('V3:AA1000', sheet_id)
     formula = "=EQ(V3, \"N/A\")"
@@ -1042,25 +1042,25 @@ def all_requests_in_order(sheet_id):
     requests.append(set_data_validation_managed_service_request(sheet_id))
     requests.append(set_data_validation_tech_boolean_criteria_request(sheet_id))
     requests.append(set_data_validation_number_of_security_risks_request(sheet_id))
-    requests.append(set_data_validation_atrophy_dates_request(sheet_id))
+    requests.append(set_data_validation_decay_dates_request(sheet_id))
     requests.append(set_data_validation_preventing_degradation_request(sheet_id))
     requests.append(set_data_validation_updated_on_date_request(sheet_id))
     requests.extend(format_dates(sheet_id))
     requests.extend(set_borders(sheet_id))
-    requests.append(set_default_green_background_tech_atrophy_summaries_request(sheet_id))
+    requests.append(set_default_green_background_tech_decay_summaries_request(sheet_id))
     requests.append(add_conditional_formatting_people_red_summary_request(sheet_id))
     requests.append(add_conditional_formatting_people_amber_summary_request(sheet_id))
     requests.append(add_conditional_formatting_people_green_summary_request(sheet_id))
     requests.extend(add_conditional_formatting_tech_summary_red(sheet_id))
     requests.append(add_conditional_formatting_tech_amber_summary_request(sheet_id))
-    requests.extend(add_conditional_formatting_atrophy_summary_red(sheet_id))
-    requests.extend(add_conditional_formatting_atrophy_summary_amber(sheet_id))
+    requests.extend(add_conditional_formatting_decay_summary_red(sheet_id))
+    requests.extend(add_conditional_formatting_decay_summary_amber(sheet_id))
     requests.extend(add_conditional_formatting_tech_individual_criteria_red(sheet_id))
     requests.append(add_conditional_formatting_tech_individual_criteria_amber_request(sheet_id))
     requests.extend(add_conditional_formatting_tech_individual_criteria_green(sheet_id))
-    requests.extend(add_conditional_formatting_atrophy_individual_criteria_red(sheet_id))
-    requests.extend(add_conditional_formatting_atrophy_individual_criteria_amber(sheet_id))
-    requests.extend(add_conditional_formatting_atrophy_individual_criteria_green(sheet_id))
+    requests.extend(add_conditional_formatting_decay_individual_criteria_red(sheet_id))
+    requests.extend(add_conditional_formatting_decay_individual_criteria_amber(sheet_id))
+    requests.extend(add_conditional_formatting_decay_individual_criteria_green(sheet_id))
     requests.extend(add_conditional_formatting_update_details_red(sheet_id))
     requests.append(add_conditional_formatting_update_details_amber_request(sheet_id))
     requests.append(add_conditional_formatting_update_details_green_request(sheet_id))
