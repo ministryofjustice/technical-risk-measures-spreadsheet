@@ -2,7 +2,7 @@ import os
 
 from conditional_formatting import date_in_past_condition, \
     date_equal_or_earlier_than_condition, date_later_than_condition
-from helpers import a1_to_range, red_background, amber_background, \
+from helpers import a1_to_range, build_cell_range, red_background, amber_background, \
     green_background, add_conditional_formatting_request, light_red_background, \
     light_amber_background, light_green_background
 
@@ -52,9 +52,14 @@ def remove_all_user_entered_formatting_request(sheet_id):
     This is a single request that can be done as part of the main batch, unlike
     deleting the conditional formatting rules.
     """
+    cell_range = build_cell_range(
+        COLUMNS['service'], 1,
+        COLUMNS['updated_on'], 1000,
+        sheet_id=sheet_id
+    )
     return {
         "repeatCell": {
-            "range": a1_to_range('A1:AD1000', sheet_id),
+            "range": cell_range,
             "cell": {
                 "userEnteredFormat": {},
             },
@@ -70,10 +75,16 @@ def protect_header_rows_request(sheet_id, users_list, groups_list):
     users = split_email_address_lists(users_list)
     groups = split_email_address_lists(groups_list)
 
+    cell_range = build_cell_range(
+        COLUMNS['service'], 1,
+        COLUMNS['updated_on'], 2,
+        sheet_id=sheet_id
+    )
+
     return {
         "addProtectedRange": {
             "protectedRange": {
-                "range": a1_to_range('A1:AD2', sheet_id),
+                "range": cell_range,
                 "description": "Header rows",
                 "warningOnly": False,
                 "editors": {
@@ -88,11 +99,31 @@ def protect_header_rows_request(sheet_id, users_list, groups_list):
 
 def merge_header_row_cells(sheet_id):
     cell_ranges = [
-        a1_to_range('B1:D1', sheet_id),
-        a1_to_range('G1:I1', sheet_id),
-        a1_to_range('J1:U1', sheet_id),
-        a1_to_range('V1:AB1', sheet_id),
-        a1_to_range('AC1:AD1', sheet_id),
+        build_cell_range(
+            COLUMNS['people_summary'], 1,
+            COLUMNS['decay_summary'], 1,
+            sheet_id=sheet_id
+        ),
+        build_cell_range(
+            COLUMNS['civil_servants'], 1,
+            COLUMNS['managed_service'], 1,
+            sheet_id=sheet_id
+        ),
+        build_cell_range(
+            COLUMNS['deploy_in_working_hours'], 1,
+            COLUMNS['high_security_risks'], 1,
+            sheet_id=sheet_id
+        ),
+        build_cell_range(
+            COLUMNS['licences_expire'], 1,
+            COLUMNS['preventing_degradation_over_time'], 1,
+            sheet_id=sheet_id
+        ),
+        build_cell_range(
+            COLUMNS['updated_by'], 1,
+            COLUMNS['updated_on'], 1,
+            sheet_id=sheet_id
+        ),
     ]
 
     requests = [
@@ -118,7 +149,7 @@ def write_first_header_rows(sheet_id):
         {
             'updateCells': {
                 'fields': '*',
-                'range': a1_to_range('B1', sheet_id),
+                'range': build_cell_range(COLUMNS['people_summary'], 1, sheet_id=sheet_id),
                 'rows': [
                     {'values': [
                         {'userEnteredValue': {'stringValue': 'Summaries'}}
@@ -129,7 +160,7 @@ def write_first_header_rows(sheet_id):
         {
             'updateCells': {
                 'fields': '*',
-                'range': a1_to_range('G1', sheet_id),
+                'range': build_cell_range(COLUMNS['civil_servants'], 1, sheet_id=sheet_id),
                 'rows': [
                     {'values': [
                         {'userEnteredValue': {'stringValue': 'People criteria'}}
@@ -140,7 +171,7 @@ def write_first_header_rows(sheet_id):
         {
             'updateCells': {
                 'fields': '*',
-                'range': a1_to_range('J1', sheet_id),
+                'range': build_cell_range(COLUMNS['deploy_in_working_hours'], 1, sheet_id=sheet_id),
                 'rows': [
                     {'values': [
                         {'userEnteredValue': {'stringValue': 'Tech criteria'}}
@@ -151,7 +182,7 @@ def write_first_header_rows(sheet_id):
         {
             'updateCells': {
                 'fields': '*',
-                'range': a1_to_range('V1', sheet_id),
+                'range': build_cell_range(COLUMNS['licences_expire'], 1, sheet_id=sheet_id),
                 'rows': [
                     {'values': [
                         {'userEnteredValue': {'stringValue': 'Decay criteria'}}
@@ -162,7 +193,7 @@ def write_first_header_rows(sheet_id):
         {
             'updateCells': {
                 'fields': '*',
-                'range': a1_to_range('AC1', sheet_id),
+                'range': build_cell_range(COLUMNS['updated_by'], 1, sheet_id=sheet_id),
                 'rows': [
                     {'values': [
                         {'userEnteredValue': {'stringValue': 'Update details'}}
@@ -179,7 +210,11 @@ def write_second_header_row_request(sheet_id):
     """
     Write the second header row values.
     """
-    cell_range = a1_to_range('A2:AD2', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['service'], 2,
+        COLUMNS['updated_on'], 2,
+        sheet_id=sheet_id
+    )
     values = [
         'Service',
         'People summary',
@@ -228,7 +263,11 @@ def write_second_header_row_request(sheet_id):
 
 
 def set_data_validation_number_of_people_request(sheet_id):
-    cell_range = a1_to_range('G3:H1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['civil_servants'], 3,
+        COLUMNS['contractors'], 1000,
+        sheet_id=sheet_id
+    )
     request = {
         "setDataValidation": {
             "range": cell_range,
@@ -250,7 +289,11 @@ def set_data_validation_number_of_people_request(sheet_id):
 
 
 def set_data_validation_managed_service_request(sheet_id):
-    cell_range = a1_to_range('I3:I1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['managed_service'], 3,
+        COLUMNS['managed_service'], 1000,
+        sheet_id=sheet_id
+    )
     request = {
         "setDataValidation": {
             "range": cell_range,
@@ -268,7 +311,11 @@ def set_data_validation_managed_service_request(sheet_id):
 
 
 def set_data_validation_tech_boolean_criteria_request(sheet_id):
-    cell_range = a1_to_range('J3:S1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['deploy_in_working_hours'], 3,
+        COLUMNS['good_understanding_of_security'], 1000,
+        sheet_id=sheet_id
+    )
     request = {
         "setDataValidation": {
             "range": cell_range,
@@ -286,7 +333,11 @@ def set_data_validation_tech_boolean_criteria_request(sheet_id):
 
 
 def set_data_validation_number_of_security_risks_request(sheet_id):
-    cell_range = a1_to_range('T3:U1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['medium_security_risks'], 3,
+        COLUMNS['high_security_risks'], 1000,
+        sheet_id=sheet_id
+    )
     request = {
         "setDataValidation": {
             "range": cell_range,
@@ -308,7 +359,11 @@ def set_data_validation_number_of_security_risks_request(sheet_id):
 
 
 def set_data_validation_decay_dates_request(sheet_id):
-    cell_range = a1_to_range('V3:AA1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['licences_expire'], 3,
+        COLUMNS['legislation_changes'], 1000,
+        sheet_id=sheet_id
+    )
     request = {
         "setDataValidation": {
             "range": cell_range,
@@ -326,7 +381,11 @@ def set_data_validation_decay_dates_request(sheet_id):
 
 
 def set_data_validation_preventing_degradation_request(sheet_id):
-    cell_range = a1_to_range('AB3:AB1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['preventing_degradation_over_time'], 3,
+        COLUMNS['preventing_degradation_over_time'], 1000,
+        sheet_id=sheet_id
+    )
     request = {
         "setDataValidation": {
             "range": cell_range,
@@ -344,7 +403,11 @@ def set_data_validation_preventing_degradation_request(sheet_id):
 
 
 def set_data_validation_updated_on_date_request(sheet_id):
-    cell_range = a1_to_range('AD3:AD1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['updated_on'], 3,
+        COLUMNS['updated_on'], 1000,
+        sheet_id=sheet_id
+    )
     request = {
         "setDataValidation": {
             "range": cell_range,
@@ -363,8 +426,16 @@ def set_data_validation_updated_on_date_request(sheet_id):
 
 def format_dates(sheet_id):
     cell_ranges = [
-        a1_to_range('V3:AA1000', sheet_id),
-        a1_to_range('AD3:AD1000', sheet_id),
+        build_cell_range(
+            COLUMNS['licences_expire'], 3,
+            COLUMNS['legislation_changes'], 1000,
+            sheet_id=sheet_id
+        ),
+        build_cell_range(
+            COLUMNS['updated_on'], 3,
+            COLUMNS['updated_on'], 1000,
+            sheet_id=sheet_id
+        ),
     ]
     requests = [
         {
@@ -387,12 +458,36 @@ def format_dates(sheet_id):
 
 def set_borders(sheet_id):
     cell_ranges = [
-        a1_to_range('B1:B1000', sheet_id),
-        a1_to_range('E1:E1000', sheet_id),
-        a1_to_range('G1:G1000', sheet_id),
-        a1_to_range('J1:J1000', sheet_id),
-        a1_to_range('V1:V1000', sheet_id),
-        a1_to_range('AC1:AC1000', sheet_id),
+        build_cell_range(
+            COLUMNS['people_summary'], 1,
+            COLUMNS['people_summary'], 1000,
+            sheet_id=sheet_id
+        ),
+        build_cell_range(
+            COLUMNS['service_area'], 1,
+            COLUMNS['service_area'], 1000,
+            sheet_id=sheet_id
+        ),
+        build_cell_range(
+            COLUMNS['civil_servants'], 1,
+            COLUMNS['civil_servants'], 1000,
+            sheet_id=sheet_id
+        ),
+        build_cell_range(
+            COLUMNS['deploy_in_working_hours'], 1,
+            COLUMNS['deploy_in_working_hours'], 1000,
+            sheet_id=sheet_id
+        ),
+        build_cell_range(
+            COLUMNS['licences_expire'], 1,
+            COLUMNS['licences_expire'], 1000,
+            sheet_id=sheet_id
+        ),
+        build_cell_range(
+            COLUMNS['updated_by'], 1,
+            COLUMNS['updated_by'], 1000,
+            sheet_id=sheet_id
+        ),
     ]
     requests = [
         {
@@ -422,7 +517,11 @@ def set_default_green_background_tech_decay_summaries_request(sheet_id):
     We need to pass values for every cell in the range we're updating, hence the
     two list comprehensions.
     """
-    cell_range = a1_to_range('C3:D1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['tech_summary'], 3,
+        COLUMNS['decay_summary'], 1000,
+        sheet_id=sheet_id
+    )
     rows = [
         {
             'values': [
@@ -446,8 +545,17 @@ def set_default_green_background_tech_decay_summaries_request(sheet_id):
 
 def add_conditional_formatting_people_red_summary_request(sheet_id):
     index = 0
-    cell_range = a1_to_range('B3:B1000', sheet_id)
-    formula = "=AND(EQ(G3,0), EQ(H3,0), EQ(I3,FALSE))"
+    cell_range = build_cell_range(
+        COLUMNS['people_summary'], 3,
+        COLUMNS['people_summary'], 1000,
+        sheet_id=sheet_id
+    )
+
+    civil_servants = COLUMNS['civil_servants'] + '3'
+    contractors = COLUMNS['contractors'] + '3'
+    managed_service = COLUMNS['managed_service'] + '3'
+
+    formula = f"=AND(EQ({civil_servants},0), EQ({contractors},0), EQ({managed_service},FALSE))"
     values = [{"userEnteredValue": formula}]
 
     return add_conditional_formatting_request(index, cell_range, values, red_background)
@@ -455,8 +563,25 @@ def add_conditional_formatting_people_red_summary_request(sheet_id):
 
 def add_conditional_formatting_people_amber_summary_request(sheet_id):
     index = 1
-    cell_range = a1_to_range('B3:B1000', sheet_id)
-    formula = "=OR(AND(EQ(G3,1), EQ(H3,0), EQ(I3,FALSE)), AND(EQ(G3,0), (H3>=1), EQ(I3,FALSE)), AND(EQ(G3,0), EQ(H3,0), EQ(I3,TRUE)), AND(EQ(G3,0), (H3>=1), EQ(I3,TRUE)), AND(EQ(G3,1), EQ(H3,1), EQ(I3,FALSE)))"
+    cell_range = build_cell_range(
+        COLUMNS['people_summary'], 3,
+        COLUMNS['people_summary'], 1000,
+        sheet_id=sheet_id
+    )
+
+    civil_servants = COLUMNS['civil_servants'] + '3'
+    contractors = COLUMNS['contractors'] + '3'
+    managed_service = COLUMNS['managed_service'] + '3'
+
+    formula = "".join([
+        "=OR(",
+            f"AND(EQ({civil_servants},1), EQ({contractors},0), EQ({managed_service},FALSE)), ",
+            f"AND(EQ({civil_servants},0), ({contractors}>=1), EQ({managed_service},FALSE)), ",
+            f"AND(EQ({civil_servants},0), EQ({contractors},0), EQ({managed_service},TRUE)), ",
+            f"AND(EQ({civil_servants},0), ({contractors}>=1), EQ({managed_service},TRUE)), ",
+            f"AND(EQ({civil_servants},1), EQ({contractors},1), EQ({managed_service},FALSE))",
+        ")"
+    ])
     values = [{"userEnteredValue": formula}]
 
     return add_conditional_formatting_request(index, cell_range, values, amber_background)
@@ -464,8 +589,23 @@ def add_conditional_formatting_people_amber_summary_request(sheet_id):
 
 def add_conditional_formatting_people_green_summary_request(sheet_id):
     index = 2
-    cell_range = a1_to_range('B3:B1000', sheet_id)
-    formula = "=OR((G3>=2), AND(EQ(G3,1), H3>=2), AND(EQ(G3,1), EQ(I3,TRUE)))"
+    cell_range = build_cell_range(
+        COLUMNS['people_summary'], 3,
+        COLUMNS['people_summary'], 1000,
+        sheet_id=sheet_id
+    )
+
+    civil_servants = COLUMNS['civil_servants'] + '3'
+    contractors = COLUMNS['contractors'] + '3'
+    managed_service = COLUMNS['managed_service'] + '3'
+
+    formula = "".join([
+        "=OR(",
+            f"({civil_servants}>=2), ",
+            f"AND(EQ({civil_servants},1), {contractors}>=2), ",
+            f"AND(EQ({civil_servants},1), EQ({managed_service},TRUE))",
+        ")"
+    ])
     values = [{"userEnteredValue": formula}]
 
     return add_conditional_formatting_request(index, cell_range, values, green_background)
@@ -474,31 +614,38 @@ def add_conditional_formatting_people_green_summary_request(sheet_id):
 def add_conditional_formatting_tech_summary_red(sheet_id):
     requests = []
 
+    cell_range = build_cell_range(
+        COLUMNS['tech_summary'], 3,
+        COLUMNS['tech_summary'], 1000,
+        sheet_id=sheet_id
+    )
+
     # Tech binary criteria - ease and risk of making changes
     index = 3
-    cell_range = a1_to_range('C3:C1000', sheet_id)
-    formula = "=COUNTIF(J3:R3,\"FALSE\") >= 2"
+    first_cell = COLUMNS['deploy_in_working_hours'] + '3'
+    last_cell = COLUMNS['code_base_easily_changed'] + '3'
+    formula = f"=COUNTIF({first_cell}:{last_cell},\"FALSE\") >= 2"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
     # Understanding of security
     index = 4
-    cell_range = a1_to_range('C3:C1000', sheet_id)
-    formula = "=EQ(S3, FALSE)"
+    cell = COLUMNS['good_understanding_of_security'] + '3'
+    formula = f"=EQ({cell}, FALSE)"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
     # Number of medium risks
     index = 5
-    cell_range = a1_to_range('C3:C1000', sheet_id)
-    formula = "=T3 > 5"
+    cell = COLUMNS['medium_security_risks'] + '3'
+    formula = f"={cell} > 5"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
     # Number of high risks
     index = 6
-    cell_range = a1_to_range('C3:C1000', sheet_id)
-    formula = "=U3 >= 1"
+    cell = COLUMNS['high_security_risks'] + '3'
+    formula = f"={cell} >= 1"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
@@ -508,8 +655,13 @@ def add_conditional_formatting_tech_summary_red(sheet_id):
 def add_conditional_formatting_tech_amber_summary_request(sheet_id):
     # Number of medium risks
     index = 7
-    cell_range = a1_to_range('C3:C1000', sheet_id)
-    formula = "=AND(T3 >= 2, T3 <= 5)"
+    cell_range = build_cell_range(
+        COLUMNS['tech_summary'], 3,
+        COLUMNS['tech_summary'], 1000,
+        sheet_id=sheet_id
+    )
+    cell = COLUMNS['medium_security_risks'] + '3'
+    formula = f"=AND({cell} >= 2, {cell} <= 5)"
     values = [{"userEnteredValue": formula}]
 
     return add_conditional_formatting_request(index, cell_range, values, amber_background)
@@ -518,46 +670,43 @@ def add_conditional_formatting_tech_amber_summary_request(sheet_id):
 def add_conditional_formatting_decay_summary_red(sheet_id):
     requests = []
 
+    cell_range = build_cell_range(
+        COLUMNS['decay_summary'], 3,
+        COLUMNS['decay_summary'], 1000,
+        sheet_id=sheet_id
+    )
+
     # Licences expire - red if date in past
     index = 8
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-
-    column = 'V'
-    formula = date_in_past_condition(column)
+    formula = date_in_past_condition(COLUMNS['licences_expire'])
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
     # Dependencies go out of support - red if date in past
     index = 9
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-    column = 'W'
-    formula = date_in_past_condition(column)
+    formula = date_in_past_condition(COLUMNS['major_dependencies_out_of_support'])
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
     # General dependency updates last applied - red if date more than a year ago
     index = 10
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = date_equal_or_earlier_than_condition('X', days_in_future=-365)
+    formula = date_equal_or_earlier_than_condition(COLUMNS['general_dependency_updates_applied'], days_in_future=-365)
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
     # Oldest unapplied security patches released - red if date more than 6 months ago
     index = 11
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = date_equal_or_earlier_than_condition('Y', days_in_future=(6 * 30 * -1))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['oldest_unapplied_security_patches_released'], days_in_future=(6 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
     # Support contract expire - red if date in past
     index = 12
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-    column = 'Z'
-    formula = date_in_past_condition(column)
+    formula = date_in_past_condition(COLUMNS['support_contract_expires'])
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
@@ -565,8 +714,7 @@ def add_conditional_formatting_decay_summary_red(sheet_id):
     # Relevant legislation changes come into effect - red if date less than
     # 3 months in the future (or already past)
     index = 13
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = date_equal_or_earlier_than_condition('AA', days_in_future=(3 * 30))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['legislation_changes'], days_in_future=(3 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
@@ -577,58 +725,58 @@ def add_conditional_formatting_decay_summary_red(sheet_id):
 def add_conditional_formatting_decay_summary_amber(sheet_id):
     requests = []
 
+    cell_range = build_cell_range(
+        COLUMNS['decay_summary'], 3,
+        COLUMNS['decay_summary'], 1000,
+        sheet_id=sheet_id
+    )
+
     # Licences expire - amber if date less than 6 months in the future (or already past)
     index = 14
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = date_equal_or_earlier_than_condition('V', days_in_future=(6 * 30))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['licences_expire'], days_in_future=(6 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
 
     # Dependencies go out of support - amber if date less than 6 months in the future (or already past)
     index = 15
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = date_equal_or_earlier_than_condition('W', days_in_future=(6 * 30))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['major_dependencies_out_of_support'], days_in_future=(6 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
 
     # General dependency updates last applied - amber if date more than 6 months ago
     index = 16
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = date_equal_or_earlier_than_condition('X', days_in_future=(6 * 30 * -1))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['general_dependency_updates_applied'], days_in_future=(6 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
 
     # Oldest unapplied security patches released - amber if date more than 3 months ago
     index = 17
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = date_equal_or_earlier_than_condition('Y', days_in_future=(3 * 30 * -1))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['oldest_unapplied_security_patches_released'], days_in_future=(3 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
 
     # Support contract expire - amber if date less than 9 months in the future (or already past)
     index = 18
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = date_equal_or_earlier_than_condition('Z', days_in_future=(9 * 30))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['support_contract_expires'], days_in_future=(9 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
 
     # Relevant legislation changes come into effect - amber if date less than 6 months in the future (or already past)
     index = 19
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = date_equal_or_earlier_than_condition('AA', days_in_future=(6 * 30))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['legislation_changes'], days_in_future=(6 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
 
     # Actively preventing degradation over time? - amber if false
     index = 20
-    cell_range = a1_to_range('D3:D1000', sheet_id)
-    formula = "=EQ(AB3,FALSE)"
+    cell = COLUMNS['preventing_degradation_over_time'] + '3'
+    formula = f"=EQ({cell},FALSE)"
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
@@ -641,22 +789,37 @@ def add_conditional_formatting_tech_individual_criteria_red(sheet_id):
 
     # Binary tech criteria - red if false
     index = 21
-    cell_range = a1_to_range('J3:S1000', sheet_id)
-    formula = "=EQ(J3,FALSE)"
+    cell_range = build_cell_range(
+        COLUMNS['deploy_in_working_hours'], 3,
+        COLUMNS['good_understanding_of_security'], 1000,
+        sheet_id=sheet_id
+    )
+    cell = COLUMNS['deploy_in_working_hours'] + '3'
+    formula = f"=EQ({cell},FALSE)"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # Number of medium risks - red if more than 5
     index = 22
-    cell_range = a1_to_range('T3:T1000', sheet_id)
-    formula = "=T3 > 5"
+    cell_range = build_cell_range(
+        COLUMNS['medium_security_risks'], 3,
+        COLUMNS['medium_security_risks'], 1000,
+        sheet_id=sheet_id
+    )
+    cell = COLUMNS['medium_security_risks'] + '3'
+    formula = f"={cell} > 5"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # Number of high risks - red if one or more
     index = 23
-    cell_range = a1_to_range('U3:U1000', sheet_id)
-    formula = "=U3 >= 1"
+    cell_range = build_cell_range(
+        COLUMNS['high_security_risks'], 3,
+        COLUMNS['high_security_risks'], 1000,
+        sheet_id=sheet_id
+    )
+    cell = COLUMNS['high_security_risks'] + '3'
+    formula = f"={cell} >= 1"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
@@ -666,8 +829,13 @@ def add_conditional_formatting_tech_individual_criteria_red(sheet_id):
 def add_conditional_formatting_tech_individual_criteria_amber_request(sheet_id):
     # Number of medium risks - amber if between 2 and 5 inclusive
     index = 24
-    cell_range = a1_to_range('T3:T1000', sheet_id)
-    formula = "=AND(T3 >= 2, T3 <= 5)"
+    cell_range = build_cell_range(
+        COLUMNS['medium_security_risks'], 3,
+        COLUMNS['medium_security_risks'], 1000,
+        sheet_id=sheet_id
+    )
+    cell = COLUMNS['medium_security_risks'] + '3'
+    formula = f"=AND({cell} >= 2, {cell} <= 5)"
     values = [{"userEnteredValue": formula}]
 
     return add_conditional_formatting_request(index, cell_range, values, light_amber_background)
@@ -678,22 +846,37 @@ def add_conditional_formatting_tech_individual_criteria_green(sheet_id):
 
     # Binary tech criteria - green if true
     index = 25
-    cell_range = a1_to_range('J3:S1000', sheet_id)
-    formula = "=EQ(J3,TRUE)"
+    cell_range = build_cell_range(
+        COLUMNS['deploy_in_working_hours'], 3,
+        COLUMNS['good_understanding_of_security'], 1000,
+        sheet_id=sheet_id
+    )
+    cell = COLUMNS['deploy_in_working_hours'] + '3'
+    formula = f"=EQ({cell},TRUE)"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Number of medium risks - green if less than 2 and not blank
     index = 26
-    cell_range = a1_to_range('T3:T1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(T3)), (T3 < 2))"
+    cell_range = build_cell_range(
+        COLUMNS['medium_security_risks'], 3,
+        COLUMNS['medium_security_risks'], 1000,
+        sheet_id=sheet_id
+    )
+    cell = COLUMNS['medium_security_risks'] + '3'
+    formula = f"=AND(NOT(ISBLANK({cell})), ({cell} < 2))"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Number of high risks - green if 0 and not blank
     index = 27
-    cell_range = a1_to_range('U3:U1000', sheet_id)
-    formula = "=AND(NOT(ISBLANK(U3)), EQ(U3,0))"
+    cell_range = build_cell_range(
+        COLUMNS['high_security_risks'], 3,
+        COLUMNS['high_security_risks'], 1000,
+        sheet_id=sheet_id
+    )
+    cell = COLUMNS['high_security_risks'] + '3'
+    formula = f"=AND(NOT(ISBLANK({cell})), EQ({cell},0))"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
@@ -705,50 +888,65 @@ def add_conditional_formatting_decay_individual_criteria_red(sheet_id):
 
     # Licences expire - red if date in past
     index = 28
-    cell_range = a1_to_range('V3:V1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['licences_expire'], 3,
+        COLUMNS['licences_expire'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'V'
-    formula = date_in_past_condition(column)
+    formula = date_in_past_condition(COLUMNS['licences_expire'])
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # Dependencies go out of support - red if date in past
     index = 29
-    cell_range = a1_to_range('W3:W1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['major_dependencies_out_of_support'], 3,
+        COLUMNS['major_dependencies_out_of_support'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'W'
-    formula = date_in_past_condition(column)
+    formula = date_in_past_condition(COLUMNS['major_dependencies_out_of_support'])
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # General dependency updates last applied - red if date more than a year ago
     index = 30
-    cell_range = a1_to_range('X3:X1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['general_dependency_updates_applied'], 3,
+        COLUMNS['general_dependency_updates_applied'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'X'
-    formula = date_equal_or_earlier_than_condition(column, days_in_future=-365)
+    formula = date_equal_or_earlier_than_condition(COLUMNS['general_dependency_updates_applied'], days_in_future=-365)
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # Oldest unapplied security patches released - red if date more than 6 months ago
     index = 31
-    cell_range = a1_to_range('Y3:Y1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['oldest_unapplied_security_patches_released'], 3,
+        COLUMNS['oldest_unapplied_security_patches_released'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'Y'
-    formula = date_equal_or_earlier_than_condition(column, days_in_future=(6 * 30 * -1))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['oldest_unapplied_security_patches_released'], days_in_future=(6 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # Support contract expire - red if date in past
     index = 32
-    cell_range = a1_to_range('Z3:Z1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['support_contract_expires'], 3,
+        COLUMNS['support_contract_expires'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'Z'
-    formula = date_in_past_condition(column)
+    formula = date_in_past_condition(COLUMNS['support_contract_expires'])
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
@@ -756,10 +954,13 @@ def add_conditional_formatting_decay_individual_criteria_red(sheet_id):
     # Relevant legislation changes come into effect - red if date less than
     # 3 months in the future (or already past)
     index = 33
-    cell_range = a1_to_range('AA3:AA1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['legislation_changes'], 3,
+        COLUMNS['legislation_changes'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'AA'
-    formula = date_equal_or_earlier_than_condition(column, days_in_future=(3 * 30))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['legislation_changes'], days_in_future=(3 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
@@ -772,68 +973,91 @@ def add_conditional_formatting_decay_individual_criteria_amber(sheet_id):
 
     # Licences expire - amber if date less than 6 months in the future (or already past)
     index = 34
-    cell_range = a1_to_range('V3:V1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['licences_expire'], 3,
+        COLUMNS['licences_expire'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'V'
-    formula = date_equal_or_earlier_than_condition(column, days_in_future=(6 * 30))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['licences_expire'], days_in_future=(6 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
     # Dependencies go out of support - amber if date less than 6 months in the future (or already past)
     index = 35
-    cell_range = a1_to_range('W3:W1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['major_dependencies_out_of_support'], 3,
+        COLUMNS['major_dependencies_out_of_support'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'W'
-    formula = date_equal_or_earlier_than_condition(column, days_in_future=(6 * 30))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['major_dependencies_out_of_support'], days_in_future=(6 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
     # General dependency updates last applied - amber if date more than 6 months ago
     index = 36
-    cell_range = a1_to_range('X3:X1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['general_dependency_updates_applied'], 3,
+        COLUMNS['general_dependency_updates_applied'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'X'
-    formula = date_equal_or_earlier_than_condition(column, days_in_future=(6 * 30 * -1))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['general_dependency_updates_applied'], days_in_future=(6 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
     # Oldest unapplied security patches released - amber if date more than 3 months ago
     index = 37
-    cell_range = a1_to_range('Y3:Y1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['oldest_unapplied_security_patches_released'], 3,
+        COLUMNS['oldest_unapplied_security_patches_released'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'Y'
-    formula = date_equal_or_earlier_than_condition(column, days_in_future=(3 * 30 * -1))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['oldest_unapplied_security_patches_released'], days_in_future=(3 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
     # Support contract expire - amber if date less than 9 months in the future (or already past)
     index = 38
-    cell_range = a1_to_range('Z3:Z1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['support_contract_expires'], 3,
+        COLUMNS['support_contract_expires'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'Z'
-    formula = date_equal_or_earlier_than_condition(column, days_in_future=(9 * 30))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['support_contract_expires'], days_in_future=(9 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
     # Relevant legislation changes come into effect - amber if date less than 6 months in the future (or already past)
     index = 39
-    cell_range = a1_to_range('AA3:AA1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['legislation_changes'], 3,
+        COLUMNS['legislation_changes'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'AA'
-    formula = date_equal_or_earlier_than_condition(column, days_in_future=(6 * 30))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['legislation_changes'], days_in_future=(6 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
     # Actively preventing degradation over time? - amber if false
     index = 40
-    cell_range = a1_to_range('AB3:AB1000', sheet_id)
-    formula = "=EQ(AB3,FALSE)"
+    cell_range = build_cell_range(
+        COLUMNS['preventing_degradation_over_time'], 3,
+        COLUMNS['preventing_degradation_over_time'], 1000,
+        sheet_id=sheet_id
+    )
+    cell = COLUMNS['preventing_degradation_over_time'] + '3'
+    formula = f"=EQ({cell},FALSE)"
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
@@ -846,76 +1070,104 @@ def add_conditional_formatting_decay_individual_criteria_green(sheet_id):
 
     # Licences expire - green if date more than 6 months in the future
     index = 41
-    cell_range = a1_to_range('V3:V1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['licences_expire'], 3,
+        COLUMNS['licences_expire'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'V'
-    formula = date_later_than_condition(column, days_in_future=(6 * 30))
+    formula = date_later_than_condition(COLUMNS['licences_expire'], days_in_future=(6 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Dependencies go out of support - green if date more than 6 months in the future
     index = 42
-    cell_range = a1_to_range('W3:W1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['major_dependencies_out_of_support'], 3,
+        COLUMNS['major_dependencies_out_of_support'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'W'
-    formula = date_later_than_condition(column, days_in_future=(6 * 30))
+    formula = date_later_than_condition(COLUMNS['major_dependencies_out_of_support'], days_in_future=(6 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # General dependency updates last applied - green if date less than 6 months ago
     index = 43
-    cell_range = a1_to_range('X3:X1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['general_dependency_updates_applied'], 3,
+        COLUMNS['general_dependency_updates_applied'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'X'
-    formula = date_later_than_condition(column, days_in_future=(6 * 30 * -1))
+    formula = date_later_than_condition(COLUMNS['general_dependency_updates_applied'], days_in_future=(6 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Oldest unapplied security patches released - green if date less than 3 months ago
     index = 44
-    cell_range = a1_to_range('Y3:Y1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['oldest_unapplied_security_patches_released'], 3,
+        COLUMNS['oldest_unapplied_security_patches_released'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'Y'
-    formula = date_later_than_condition(column, days_in_future=(3 * 30 * -1))
+    formula = date_later_than_condition(COLUMNS['oldest_unapplied_security_patches_released'], days_in_future=(3 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Support contract expire - green if date more than 9 months in the future
     index = 45
-    cell_range = a1_to_range('Z3:Z1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['support_contract_expires'], 3,
+        COLUMNS['support_contract_expires'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'Z'
-    formula = date_later_than_condition(column, days_in_future=(9 * 30))
+    formula = date_later_than_condition(COLUMNS['support_contract_expires'], days_in_future=(9 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Relevant legislation changes come into effect - green if date more than 6 months in the future
     index = 46
-    cell_range = a1_to_range('AA3:AA1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['legislation_changes'], 3,
+        COLUMNS['legislation_changes'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'AA'
-    formula = date_later_than_condition(column, days_in_future=(6 * 30))
+    formula = date_later_than_condition(COLUMNS['legislation_changes'], days_in_future=(6 * 30))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # Actively preventing degradation over time? - green if true
     index = 47
-    cell_range = a1_to_range('AB3:AB1000', sheet_id)
-    formula = "=EQ(AB3,TRUE)"
+    cell_range = build_cell_range(
+        COLUMNS['preventing_degradation_over_time'], 3,
+        COLUMNS['preventing_degradation_over_time'], 1000,
+        sheet_id=sheet_id
+    )
+    cell = COLUMNS['preventing_degradation_over_time'] + '3'
+    formula = f"=EQ({cell},TRUE)"
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
     # All date-based decay criteria - green if not applicable (entered as "N/A")
     index = 48
-    cell_range = a1_to_range('V3:AA1000', sheet_id)
-    formula = "=EQ(V3, \"N/A\")"
+    cell_range = build_cell_range(
+        COLUMNS['licences_expire'], 3,
+        COLUMNS['legislation_changes'], 1000,
+        sheet_id=sheet_id
+    )
+    cell = COLUMNS['licences_expire'] + '3'
+    formula = f"=EQ({cell}, \"N/A\")"
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
@@ -928,28 +1180,39 @@ def add_conditional_formatting_update_details_red(sheet_id):
 
     # Both update details columns - red if blank
     index = 49
-    cell_range = a1_to_range('AC3:AD1000', sheet_id)
-    formula = "=ISBLANK(AC3)"
+    cell_range = build_cell_range(
+        COLUMNS['updated_by'], 3,
+        COLUMNS['updated_on'], 1000,
+        sheet_id=sheet_id
+    )
+    cell = COLUMNS['updated_by'] + '3'
+    formula = f"=ISBLANK({cell})"
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # Updated on - red if in the future
     index = 50
-    cell_range = a1_to_range('AD3:AD1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['updated_on'], 3,
+        COLUMNS['updated_on'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'AD'
-    formula = date_later_than_condition(column, days_in_future=(0))
+    formula = date_later_than_condition(COLUMNS['updated_on'], days_in_future=(0))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
     # Updated on - red if more than 3 months ago
     index = 51
-    cell_range = a1_to_range('AD3:AD1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['updated_on'], 3,
+        COLUMNS['updated_on'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'AD'
-    formula = date_equal_or_earlier_than_condition(column, days_in_future=(3 * 30 * -1))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['updated_on'], days_in_future=(3 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
@@ -960,10 +1223,13 @@ def add_conditional_formatting_update_details_red(sheet_id):
 def add_conditional_formatting_update_details_amber_request(sheet_id):
     # Updated on - amber if more than 2 months ago
     index = 52
-    cell_range = a1_to_range('AD3:AD1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['updated_on'], 3,
+        COLUMNS['updated_on'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'AD'
-    formula = date_equal_or_earlier_than_condition(column, days_in_future=(2 * 30 * -1))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['updated_on'], days_in_future=(2 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     return add_conditional_formatting_request(index, cell_range, values, light_amber_background)
@@ -972,10 +1238,13 @@ def add_conditional_formatting_update_details_amber_request(sheet_id):
 def add_conditional_formatting_update_details_green_request(sheet_id):
     # Updated on - green if less than 2 months ago
     index = 53
-    cell_range = a1_to_range('AD3:AD1000', sheet_id)
+    cell_range = build_cell_range(
+        COLUMNS['updated_on'], 3,
+        COLUMNS['updated_on'], 1000,
+        sheet_id=sheet_id
+    )
 
-    column = 'AD'
-    formula = date_later_than_condition(column, days_in_future=(2 * 30 * -1))
+    formula = date_later_than_condition(COLUMNS['updated_on'], days_in_future=(2 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     return add_conditional_formatting_request(index, cell_range, values, light_green_background)
@@ -998,8 +1267,16 @@ def freeze_header_rows_and_summary_columns_request(sheet_id):
 
 def bold_and_wrap_text_in_header_rows_and_service_column(sheet_id):
     cell_ranges = [
-        a1_to_range('A1:AD2', sheet_id),
-        a1_to_range('A3:A1000', sheet_id),
+        build_cell_range(
+            COLUMNS['service'], 1,
+            COLUMNS['updated_on'], 2,
+            sheet_id=sheet_id
+        ),
+        build_cell_range(
+            COLUMNS['service'], 3,
+            COLUMNS['service'], 1000,
+            sheet_id=sheet_id
+        ),
     ]
     requests = [
         {
@@ -1023,19 +1300,19 @@ def bold_and_wrap_text_in_header_rows_and_service_column(sheet_id):
 
 def set_column_widths(sheet_id):
     # Default column width is 100 pixels
-    a1_with_widths = [
-        ('A1:A1000', 230),
-        ('E1:E1000', 160),
-        ('F1:F1000', 200),
-        ('G1:G1000', 95),
-        ('H1:H1000', 85),
-        ('I1:I1000', 65),
-        ('AC1:AC1000', 120),
+    column_names_with_widths = [
+        ('service', 230),
+        ('service_area', 160),
+        ('notes', 200),
+        ('civil_servants', 95),
+        ('contractors', 85),
+        ('managed_service', 65),
+        ('updated_by', 120),
     ]
 
     # This API call wants the range in a different format
-    def format_a1_ranges_with_column_dimension(a1, sheet_id):
-        full_range = a1_to_range(a1, sheet_id)
+    def format_range_with_dimension(column_name, sheet_id):
+        full_range = build_cell_range(COLUMNS[column_name], 1, COLUMNS[column_name], 1000, sheet_id=sheet_id)
         return {
             "sheetId": sheet_id,
             "dimension": "COLUMNS",
@@ -1046,13 +1323,13 @@ def set_column_widths(sheet_id):
     requests = [
         {
             "updateDimensionProperties": {
-                "range": format_a1_ranges_with_column_dimension(a1, sheet_id),
+                "range": format_range_with_dimension(column_name, sheet_id),
                 "properties": {
                     "pixelSize": width
                 },
                 "fields": "pixelSize"
             }
-        } for a1, width in a1_with_widths
+        } for column_name, width in column_names_with_widths
     ]
 
     return requests
