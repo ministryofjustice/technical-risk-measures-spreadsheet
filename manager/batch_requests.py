@@ -11,6 +11,40 @@ PROTECTED_RANGE_EDITOR_USERS = os.environ['PROTECTED_RANGE_EDITOR_USERS']
 PROTECTED_RANGE_EDITOR_GROUPS = os.environ['PROTECTED_RANGE_EDITOR_GROUPS']
 
 
+COLUMNS = {
+    'service': 'A',
+    'people_summary': 'B',
+    'tech_summary': 'C',
+    'decay_summary': 'D',
+    'service_area': 'E',
+    'notes': 'F',
+    'civil_servants': 'G',
+    'contractors': 'H',
+    'managed_service': 'I',
+    'deploy_in_working_hours': 'J',
+    'automated_tests': 'K',
+    'build_promotion': 'L',
+    'team_own_complete_deployment': 'M',
+    'deploy_multiple_times_a_day': 'N',
+    'alerts_well_understood': 'O',
+    'logs_aggregated_searchable': 'P',
+    'backup_recovery_strategy': 'Q',
+    'code_base_easily_changed': 'R',
+    'good_understanding_of_security': 'S',
+    'medium_security_risks': 'T',
+    'high_security_risks': 'U',
+    'licences_expire': 'V',
+    'major_dependencies_out_of_support': 'W',
+    'general_dependency_updates_applied': 'X',
+    'oldest_unapplied_security_patches_released': 'Y',
+    'support_contract_expires': 'Z',
+    'legislation_changes': 'AA',
+    'preventing_degradation_over_time': 'AB',
+    'updated_by': 'AC',
+    'updated_on': 'AD',
+}
+
+
 def remove_all_user_entered_formatting_request(sheet_id):
     """
     Do this at the start, to clear any formatting that's been copied+pasted.
