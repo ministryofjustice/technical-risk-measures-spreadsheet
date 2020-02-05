@@ -41,7 +41,7 @@ to the root of the repo. This file contains the private key for authenticating
 with the API as this service account - `*.json` is in the `.gitignore` so it
 should be safe to keep it here as long as you keep the file extension on it.
 - Add the name of that key file into `.env` as `SERVICE_ACCOUNT_FILE`
-- In your spreadsheet. give edit access to the email address of your service
+- In your spreadsheet, give edit access to the email address of your service
 account - you can find this as `"client_email"` in the json key file
 
 Now you're ready to run this script!
