@@ -35,13 +35,12 @@ COLUMNS = {
     'high_security_risks': 'U',
     'licences_expire': 'V',
     'major_dependencies_out_of_support': 'W',
-    'general_dependency_updates_applied': 'X',
-    'oldest_unapplied_security_patches_released': 'Y',
-    'support_contract_expires': 'Z',
-    'legislation_changes': 'AA',
-    'preventing_degradation_over_time': 'AB',
-    'updated_by': 'AC',
-    'updated_on': 'AD',
+    'oldest_unapplied_dependency_version_released': 'X',
+    'support_contract_expires': 'Y',
+    'legislation_changes': 'Z',
+    'preventing_degradation_over_time': 'AA',
+    'updated_by': 'AB',
+    'updated_on': 'AC',
 }
 
 
@@ -239,8 +238,7 @@ def write_second_header_row_request(sheet_id):
         'Number of high security risks',
         'When do licences expire?',
         'When will major dependencies go out of support?',
-        'When were general dependency updates last applied?',
-        'When were the oldest unapplied security patches released?',
+        'When was the oldest unapplied version of any dependency released?',
         'When does the support contract expire?',
         'When do the next relevant legislation changes come into effect?',
         'Are we actively preventing degradation over time?',
@@ -690,19 +688,14 @@ def add_conditional_formatting_decay_summary_red(sheet_id):
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
-    # General dependency updates last applied - red if date more than a year ago
+    # Oldest unapplied dependency version released - red if date more than a year ago
     index = 10
-    formula = date_equal_or_earlier_than_condition(COLUMNS['general_dependency_updates_applied'], days_in_future=-365)
+    formula = date_equal_or_earlier_than_condition(COLUMNS['oldest_unapplied_dependency_version_released'], days_in_future=-365)
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
-    # Oldest unapplied security patches released - red if date more than 6 months ago
-    index = 11
-    formula = date_equal_or_earlier_than_condition(COLUMNS['oldest_unapplied_security_patches_released'], days_in_future=(6 * 30 * -1))
-    values = [{"userEnteredValue": formula}]
-
-    requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
+    # FIXME: index 11 removed herw
 
     # Support contract expire - red if date in past
     index = 12
@@ -745,19 +738,14 @@ def add_conditional_formatting_decay_summary_amber(sheet_id):
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
 
-    # General dependency updates last applied - amber if date more than 6 months ago
+    # Oldest unapplied dependency version released - amber if date more than 3 months ago
     index = 16
-    formula = date_equal_or_earlier_than_condition(COLUMNS['general_dependency_updates_applied'], days_in_future=(6 * 30 * -1))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['oldest_unapplied_dependency_version_released'], days_in_future=(3 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
 
-    # Oldest unapplied security patches released - amber if date more than 3 months ago
-    index = 17
-    formula = date_equal_or_earlier_than_condition(COLUMNS['oldest_unapplied_security_patches_released'], days_in_future=(3 * 30 * -1))
-    values = [{"userEnteredValue": formula}]
-
-    requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
+    # FIXME: index 17 removed here
 
     # Support contract expire - amber if date less than 9 months in the future (or already past)
     index = 18
@@ -912,31 +900,20 @@ def add_conditional_formatting_decay_individual_criteria_red(sheet_id):
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
-    # General dependency updates last applied - red if date more than a year ago
+    # Oldest unapplied dependency version released - red if date more than a year ago
     index = 30
     cell_range = build_cell_range(
-        COLUMNS['general_dependency_updates_applied'], 3,
-        COLUMNS['general_dependency_updates_applied'], 1000,
+        COLUMNS['oldest_unapplied_dependency_version_released'], 3,
+        COLUMNS['oldest_unapplied_dependency_version_released'], 1000,
         sheet_id=sheet_id
     )
 
-    formula = date_equal_or_earlier_than_condition(COLUMNS['general_dependency_updates_applied'], days_in_future=-365)
+    formula = date_equal_or_earlier_than_condition(COLUMNS['oldest_unapplied_dependency_version_released'], days_in_future=-365)
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
-    # Oldest unapplied security patches released - red if date more than 6 months ago
-    index = 31
-    cell_range = build_cell_range(
-        COLUMNS['oldest_unapplied_security_patches_released'], 3,
-        COLUMNS['oldest_unapplied_security_patches_released'], 1000,
-        sheet_id=sheet_id
-    )
-
-    formula = date_equal_or_earlier_than_condition(COLUMNS['oldest_unapplied_security_patches_released'], days_in_future=(6 * 30 * -1))
-    values = [{"userEnteredValue": formula}]
-
-    requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
+    # FIXME: index 31 removed here
 
     # Support contract expire - red if date in past
     index = 32
@@ -997,31 +974,20 @@ def add_conditional_formatting_decay_individual_criteria_amber(sheet_id):
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
-    # General dependency updates last applied - amber if date more than 6 months ago
+    # Oldest unapplied dependency version released - amber if date more than 3 months ago
     index = 36
     cell_range = build_cell_range(
-        COLUMNS['general_dependency_updates_applied'], 3,
-        COLUMNS['general_dependency_updates_applied'], 1000,
+        COLUMNS['oldest_unapplied_dependency_version_released'], 3,
+        COLUMNS['oldest_unapplied_dependency_version_released'], 1000,
         sheet_id=sheet_id
     )
 
-    formula = date_equal_or_earlier_than_condition(COLUMNS['general_dependency_updates_applied'], days_in_future=(6 * 30 * -1))
+    formula = date_equal_or_earlier_than_condition(COLUMNS['oldest_unapplied_dependency_version_released'], days_in_future=(3 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
 
-    # Oldest unapplied security patches released - amber if date more than 3 months ago
-    index = 37
-    cell_range = build_cell_range(
-        COLUMNS['oldest_unapplied_security_patches_released'], 3,
-        COLUMNS['oldest_unapplied_security_patches_released'], 1000,
-        sheet_id=sheet_id
-    )
-
-    formula = date_equal_or_earlier_than_condition(COLUMNS['oldest_unapplied_security_patches_released'], days_in_future=(3 * 30 * -1))
-    values = [{"userEnteredValue": formula}]
-
-    requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
+    # FIXME: index 37 removed here
 
     # Support contract expire - amber if date less than 9 months in the future (or already past)
     index = 38
@@ -1094,31 +1060,20 @@ def add_conditional_formatting_decay_individual_criteria_green(sheet_id):
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
-    # General dependency updates last applied - green if date less than 6 months ago
+    # Oldest unapplied dependency version released - green if date less than 3 months ago
     index = 43
     cell_range = build_cell_range(
-        COLUMNS['general_dependency_updates_applied'], 3,
-        COLUMNS['general_dependency_updates_applied'], 1000,
+        COLUMNS['oldest_unapplied_dependency_version_released'], 3,
+        COLUMNS['oldest_unapplied_dependency_version_released'], 1000,
         sheet_id=sheet_id
     )
 
-    formula = date_later_than_condition(COLUMNS['general_dependency_updates_applied'], days_in_future=(6 * 30 * -1))
+    formula = date_later_than_condition(COLUMNS['oldest_unapplied_dependency_version_released'], days_in_future=(3 * 30 * -1))
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
-    # Oldest unapplied security patches released - green if date less than 3 months ago
-    index = 44
-    cell_range = build_cell_range(
-        COLUMNS['oldest_unapplied_security_patches_released'], 3,
-        COLUMNS['oldest_unapplied_security_patches_released'], 1000,
-        sheet_id=sheet_id
-    )
-
-    formula = date_later_than_condition(COLUMNS['oldest_unapplied_security_patches_released'], days_in_future=(3 * 30 * -1))
-    values = [{"userEnteredValue": formula}]
-
-    requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
+    # FIXME: index 44 removed here
 
     # Support contract expire - green if date more than 9 months in the future
     index = 45
