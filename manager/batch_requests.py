@@ -2,7 +2,7 @@ import os
 
 from conditional_formatting import date_in_past_condition, \
     date_equal_or_earlier_than_condition, date_later_than_condition
-from helpers import a1_to_range, build_cell_range, red_background, amber_background, \
+from helpers import build_cell_range, red_background, amber_background, \
     green_background, add_conditional_formatting_request, light_red_background, \
     light_amber_background, light_green_background
 
