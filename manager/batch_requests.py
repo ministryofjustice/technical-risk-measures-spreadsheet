@@ -555,7 +555,7 @@ def add_conditional_formatting_people_red_summary_request(sheet_id):
     contractors = COLUMNS['contractors'] + '3'
     managed_service = COLUMNS['managed_service'] + '3'
 
-    formula = f"=AND(EQ({civil_servants},0), EQ({contractors},0), EQ({managed_service},FALSE))"
+    formula = f"=AND(({civil_servants}=0), ({contractors}=0), ({managed_service}=FALSE))"
     values = [{"userEnteredValue": formula}]
 
     return add_conditional_formatting_request(index, cell_range, values, red_background)
@@ -575,11 +575,11 @@ def add_conditional_formatting_people_amber_summary_request(sheet_id):
 
     formula = "".join([
         "=OR(",
-            f"AND(EQ({civil_servants},1), EQ({contractors},0), EQ({managed_service},FALSE)), ",
-            f"AND(EQ({civil_servants},0), ({contractors}>=1), EQ({managed_service},FALSE)), ",
-            f"AND(EQ({civil_servants},0), EQ({contractors},0), EQ({managed_service},TRUE)), ",
-            f"AND(EQ({civil_servants},0), ({contractors}>=1), EQ({managed_service},TRUE)), ",
-            f"AND(EQ({civil_servants},1), EQ({contractors},1), EQ({managed_service},FALSE))",
+            f"AND(({civil_servants}=1), ({contractors}=0), ({managed_service}=FALSE)), ",
+            f"AND(({civil_servants}=0), ({contractors}>=1), ({managed_service}=FALSE)), ",
+            f"AND(({civil_servants}=0), ({contractors}=0), ({managed_service}=TRUE)), ",
+            f"AND(({civil_servants}=0), ({contractors}>=1), ({managed_service}=TRUE)), ",
+            f"AND(({civil_servants}=1), ({contractors}=1), ({managed_service}=FALSE))",
         ")"
     ])
     values = [{"userEnteredValue": formula}]
@@ -602,8 +602,8 @@ def add_conditional_formatting_people_green_summary_request(sheet_id):
     formula = "".join([
         "=OR(",
             f"({civil_servants}>=2), ",
-            f"AND(EQ({civil_servants},1), {contractors}>=2), ",
-            f"AND(EQ({civil_servants},1), EQ({managed_service},TRUE))",
+            f"AND(({civil_servants}=1), {contractors}>=2), ",
+            f"AND(({civil_servants}=1), ({managed_service}=TRUE))",
         ")"
     ])
     values = [{"userEnteredValue": formula}]
@@ -631,7 +631,7 @@ def add_conditional_formatting_tech_summary_red(sheet_id):
     # Understanding of security
     index = 4
     cell = COLUMNS['good_understanding_of_security'] + '3'
-    formula = f"=EQ({cell}, FALSE)"
+    formula = f"=({cell}=FALSE)"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
 
@@ -776,7 +776,7 @@ def add_conditional_formatting_decay_summary_amber(sheet_id):
     # Actively preventing degradation over time? - amber if false
     index = 20
     cell = COLUMNS['preventing_degradation_over_time'] + '3'
-    formula = f"=EQ({cell},FALSE)"
+    formula = f"=({cell}=FALSE)"
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, amber_background))
@@ -795,7 +795,7 @@ def add_conditional_formatting_tech_individual_criteria_red(sheet_id):
         sheet_id=sheet_id
     )
     cell = COLUMNS['deploy_in_working_hours'] + '3'
-    formula = f"=EQ({cell},FALSE)"
+    formula = f"=({cell}=FALSE)"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
 
@@ -852,7 +852,7 @@ def add_conditional_formatting_tech_individual_criteria_green(sheet_id):
         sheet_id=sheet_id
     )
     cell = COLUMNS['deploy_in_working_hours'] + '3'
-    formula = f"=EQ({cell},TRUE)"
+    formula = f"=({cell}=TRUE)"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
@@ -876,7 +876,7 @@ def add_conditional_formatting_tech_individual_criteria_green(sheet_id):
         sheet_id=sheet_id
     )
     cell = COLUMNS['high_security_risks'] + '3'
-    formula = f"=AND(NOT(ISBLANK({cell})), EQ({cell},0))"
+    formula = f"=AND(NOT(ISBLANK({cell})), ({cell}=0))"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
 
@@ -1057,7 +1057,7 @@ def add_conditional_formatting_decay_individual_criteria_amber(sheet_id):
         sheet_id=sheet_id
     )
     cell = COLUMNS['preventing_degradation_over_time'] + '3'
-    formula = f"=EQ({cell},FALSE)"
+    formula = f"=({cell}=FALSE)"
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_amber_background))
@@ -1154,7 +1154,7 @@ def add_conditional_formatting_decay_individual_criteria_green(sheet_id):
         sheet_id=sheet_id
     )
     cell = COLUMNS['preventing_degradation_over_time'] + '3'
-    formula = f"=EQ({cell},TRUE)"
+    formula = f"=({cell}=TRUE)"
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
@@ -1167,7 +1167,7 @@ def add_conditional_formatting_decay_individual_criteria_green(sheet_id):
         sheet_id=sheet_id
     )
     cell = COLUMNS['licences_expire'] + '3'
-    formula = f"=EQ({cell}, \"N/A\")"
+    formula = f"=({cell}=\"N/A\")"
     values = [{"userEnteredValue": formula}]
 
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))
