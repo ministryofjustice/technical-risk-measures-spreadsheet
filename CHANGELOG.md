@@ -15,6 +15,11 @@ other changes which are not included here.
 
 ## 2.0
 
+Supports the [documentation as of 2020-02-03](https://github.com/ministryofjustice/technical-risk-measures/tree/2ed7eb551c40365603a425e6cf11655ec175396b).
+
+This version contains two breaking changes. Follow the migration instructions
+for both of them in order before running the script.
+
 ### Merging general dependencies and security patches into one measure
 
 These two adjacent columns are replaced with one, reducing the total number of
@@ -29,6 +34,20 @@ this, delete **column Y** ("When were the oldest unapplied security patches
 released?").
 
 Or if you don't want to keep any data from these columns, just delete column Y.
+
+### Merging 4 measures about ease of making changes into 2
+
+Two columns are removed, and two others are replaced with two new ones, reducing
+the total number of columns further to 27.
+
+Delete **column R** ("Code base can be easily changed?") and **column J**
+("Team can deploy in working hours?").
+
+The affected criteria have changed enough that existing data from the other two
+columns which will be replaced ("Team who owns the app own the complete
+deployment?" and "Can deploy multiple times a day?) is unlikely to be accurate
+for the new definitions, so it's best to delete the data from these two columns
+(now **columns L and M**).
 
 Then run the script.
 

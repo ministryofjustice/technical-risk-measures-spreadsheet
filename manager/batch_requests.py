@@ -21,26 +21,24 @@ COLUMNS = {
     'civil_servants': 'G',
     'contractors': 'H',
     'managed_service': 'I',
-    'deploy_in_working_hours': 'J',
-    'automated_tests': 'K',
-    'build_promotion': 'L',
-    'team_own_complete_deployment': 'M',
-    'deploy_multiple_times_a_day': 'N',
-    'alerts_well_understood': 'O',
-    'logs_aggregated_searchable': 'P',
-    'backup_recovery_strategy': 'Q',
-    'code_base_easily_changed': 'R',
-    'good_understanding_of_security': 'S',
-    'medium_security_risks': 'T',
-    'high_security_risks': 'U',
-    'licences_expire': 'V',
-    'major_dependencies_out_of_support': 'W',
-    'oldest_unapplied_dependency_version_released': 'X',
-    'support_contract_expires': 'Y',
-    'legislation_changes': 'Z',
-    'preventing_degradation_over_time': 'AA',
-    'updated_by': 'AB',
-    'updated_on': 'AC',
+    'automated_tests': 'J',
+    'build_promotion': 'K',
+    'change_process_quick_easy_cheap': 'L',
+    'deploy_quickly_easily_in_working_hours_without_downtime': 'M',
+    'alerts_well_understood': 'N',
+    'logs_aggregated_searchable': 'O',
+    'backup_recovery_strategy': 'P',
+    'good_understanding_of_security': 'Q',
+    'medium_security_risks': 'R',
+    'high_security_risks': 'S',
+    'licences_expire': 'T',
+    'major_dependencies_out_of_support': 'U',
+    'oldest_unapplied_dependency_version_released': 'V',
+    'support_contract_expires': 'W',
+    'legislation_changes': 'X',
+    'preventing_degradation_over_time': 'Y',
+    'updated_by': 'Z',
+    'updated_on': 'AA',
 }
 
 
@@ -109,7 +107,7 @@ def merge_header_row_cells(sheet_id):
             sheet_id=sheet_id
         ),
         build_cell_range(
-            COLUMNS['deploy_in_working_hours'], 1,
+            COLUMNS['automated_tests'], 1,
             COLUMNS['high_security_risks'], 1,
             sheet_id=sheet_id
         ),
@@ -170,7 +168,7 @@ def write_first_header_rows(sheet_id):
         {
             'updateCells': {
                 'fields': '*',
-                'range': build_cell_range(COLUMNS['deploy_in_working_hours'], 1, sheet_id=sheet_id),
+                'range': build_cell_range(COLUMNS['automated_tests'], 1, sheet_id=sheet_id),
                 'rows': [
                     {'values': [
                         {'userEnteredValue': {'stringValue': 'Tech criteria'}}
@@ -224,15 +222,13 @@ def write_second_header_row_request(sheet_id):
         'Number of civil servants',
         'Number of contractors',
         'Managed service?',
-        'Team can deploy in working hours?',
         'Application has automated tests?',
         'Application has build promotion through test environments?',
-        'Team who owns the app own the complete deployment?',
-        'Can deploy multiple times a day?',
+        'The overall process for making a change to the service is quick, easy and cheap for us?',
+        'Changes to the service can be deployed quickly and easily during working hours, without downtime for users?',
         'Alerts for an incident are well understood and sent to a known place?',
         'Logs are aggregated and searchable?',
         'Application has a backup & recovery strategy?',
-        'Code base can be easily changed?',
         'Team has a good understanding of application\'s security?',
         'Number of medium security risks',
         'Number of high security risks',
@@ -310,7 +306,7 @@ def set_data_validation_managed_service_request(sheet_id):
 
 def set_data_validation_tech_boolean_criteria_request(sheet_id):
     cell_range = build_cell_range(
-        COLUMNS['deploy_in_working_hours'], 3,
+        COLUMNS['automated_tests'], 3,
         COLUMNS['good_understanding_of_security'], 1000,
         sheet_id=sheet_id
     )
@@ -472,8 +468,8 @@ def set_borders(sheet_id):
             sheet_id=sheet_id
         ),
         build_cell_range(
-            COLUMNS['deploy_in_working_hours'], 1,
-            COLUMNS['deploy_in_working_hours'], 1000,
+            COLUMNS['automated_tests'], 1,
+            COLUMNS['automated_tests'], 1000,
             sheet_id=sheet_id
         ),
         build_cell_range(
@@ -620,8 +616,8 @@ def add_conditional_formatting_tech_summary_red(sheet_id):
 
     # Tech binary criteria - ease and risk of making changes
     index = 3
-    first_cell = COLUMNS['deploy_in_working_hours'] + '3'
-    last_cell = COLUMNS['code_base_easily_changed'] + '3'
+    first_cell = COLUMNS['automated_tests'] + '3'
+    last_cell = COLUMNS['backup_recovery_strategy'] + '3'
     formula = f"=COUNTIF({first_cell}:{last_cell},\"FALSE\") >= 2"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, red_background))
@@ -778,11 +774,11 @@ def add_conditional_formatting_tech_individual_criteria_red(sheet_id):
     # Binary tech criteria - red if false
     index = 21
     cell_range = build_cell_range(
-        COLUMNS['deploy_in_working_hours'], 3,
+        COLUMNS['automated_tests'], 3,
         COLUMNS['good_understanding_of_security'], 1000,
         sheet_id=sheet_id
     )
-    cell = COLUMNS['deploy_in_working_hours'] + '3'
+    cell = COLUMNS['automated_tests'] + '3'
     formula = f"=({cell}=FALSE)"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_red_background))
@@ -835,11 +831,11 @@ def add_conditional_formatting_tech_individual_criteria_green(sheet_id):
     # Binary tech criteria - green if true
     index = 25
     cell_range = build_cell_range(
-        COLUMNS['deploy_in_working_hours'], 3,
+        COLUMNS['automated_tests'], 3,
         COLUMNS['good_understanding_of_security'], 1000,
         sheet_id=sheet_id
     )
-    cell = COLUMNS['deploy_in_working_hours'] + '3'
+    cell = COLUMNS['automated_tests'] + '3'
     formula = f"=({cell}=TRUE)"
     values = [{"userEnteredValue": formula}]
     requests.append(add_conditional_formatting_request(index, cell_range, values, light_green_background))

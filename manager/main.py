@@ -170,7 +170,7 @@ def main():
     sheet = get_sheet(service, SHEET_TITLE)
     sheet_id = get_sheet_id(sheet)
 
-    expected_column_count = 29
+    expected_column_count = 27
     actual_column_count = sheet['properties']['gridProperties']['columnCount']
     if actual_column_count != expected_column_count:
         raise(Exception("\n".join([
