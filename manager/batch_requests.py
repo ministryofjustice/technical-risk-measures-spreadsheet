@@ -226,7 +226,7 @@ def write_second_header_row_request(sheet_id):
         'Application has a deployment pipeline which includes promoting a build artefact through at least one production-like test environment before production?',
         'The overall process for making a change to the service is quick, easy and cheap for us?',
         'Changes to the service can be deployed quickly and easily during working hours, without downtime for users?',
-        'Alerts for an incident are well understood and sent to a known place?',
+        'Alerts for an incident are well understood, sent to a known place and can be responded to effectively?',
         'Logs are aggregated and searchable?',
         'Application has a backup/recovery strategy which is tested regularly and provides continuity to users?',
         'Team has a good understanding of application\'s security?',
