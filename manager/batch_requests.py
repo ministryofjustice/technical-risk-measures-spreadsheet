@@ -228,7 +228,7 @@ def write_second_header_row_request(sheet_id):
         'Changes to the service can be deployed quickly and easily during working hours, without downtime for users?',
         'Alerts for an incident are well understood and sent to a known place?',
         'Logs are aggregated and searchable?',
-        'Application has a backup & recovery strategy?',
+        'Application has a backup/recovery strategy which is tested regularly and provides continuity to users?',
         'Team has a good understanding of application\'s security?',
         'Number of medium security risks',
         'Number of high security risks',
