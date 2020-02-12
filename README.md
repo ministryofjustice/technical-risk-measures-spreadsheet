@@ -1,5 +1,5 @@
-Python scripts to set up spreadsheets for tracking MOJ's technical risk
-measures, using the [Google Sheets API](https://developers.google.com/sheets/api/).
+Python scripts to set up spreadsheets for tracking [MOJ's technical risk
+measures](https://github.com/ministryofjustice/technical-risk-measures), using the [Google Sheets API](https://developers.google.com/sheets/api/).
 
 ## Development setup
 
