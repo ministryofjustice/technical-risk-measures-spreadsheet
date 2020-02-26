@@ -1,6 +1,9 @@
 Python scripts to set up spreadsheets for tracking [MOJ's technical risk
 measures](https://github.com/ministryofjustice/technical-risk-measures), using the [Google Sheets API](https://developers.google.com/sheets/api/).
 
+Here's a [public read-only demo spreadsheet](https://docs.google.com/spreadsheets/d/13vQC9WL2pk5fgzbJTiXx4j1osCg8TmaWIniP9br1fHE/edit)
+set up using this.
+
 ## Development setup
 
 This project uses [Pipenv](https://docs.pipenv.org/en/latest/basics/) to manage
